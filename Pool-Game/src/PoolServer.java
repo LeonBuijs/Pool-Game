@@ -5,6 +5,13 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.Force;
+import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Vector2;
+
 public class PoolServer {
     public static void main(String[] args) throws IOException {
         System.out.println("Server");
