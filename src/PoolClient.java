@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 
 public class PoolClient extends Application {
+    private int width = 1600;
+    private int height = 900;
     private ResizableCanvas canvas;
     private BufferedImage image;
     private ArrayList<Ball> balls = new ArrayList<>();
@@ -76,14 +78,14 @@ public class PoolClient extends Application {
         });
 
         threadReceive.start();
-        primaryStage.setScene(new Scene(mainPane, 1600, 900));
+        primaryStage.setScene(new Scene(mainPane, this.width, this.height));
         primaryStage.setTitle("Pool Game");
         primaryStage.show();
         draw(g2d);
     }
 
     private void draw(FXGraphics2D g) {
-        g.drawImage(image, 0,0, null);
+        g.drawImage(image, (this.width-image.getWidth())/2,(this.height-image.getHeight())/2, null);
     }
 
     private void receive(Socket socket) throws IOException {
