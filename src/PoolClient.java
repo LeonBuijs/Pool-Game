@@ -20,9 +20,10 @@ public class PoolClient extends Application {
     private ResizableCanvas canvas;
     private BufferedImage image;
     private ArrayList<Ball> balls = new ArrayList<>();
+    private Ball ballWhite;
 
     public void init() throws IOException {
-        Ball ballWhite = new Ball();
+        this.ballWhite = new Ball();
         for (int i = 0; i < 15; i++) {
             Ball ball = new Ball();
             balls.add(ball);
@@ -86,6 +87,10 @@ public class PoolClient extends Application {
 
     private void draw(FXGraphics2D g) {
         g.drawImage(image, (this.width-image.getWidth())/2,(this.height-image.getHeight())/2, null);
+        ballWhite.draw(g);
+        for (Ball ball : balls) {
+            ball.draw(g);
+        }
     }
 
     private void receive(Socket socket) throws IOException {
