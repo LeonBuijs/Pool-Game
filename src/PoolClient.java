@@ -64,9 +64,45 @@ public class PoolClient extends Application {
     private void receive(Socket socket) throws IOException {
         InputStream inputStream = socket.getInputStream();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
         String input = bufferedReader.readLine();
         String type = input.substring(0, input.indexOf(" "));
         String data = input.substring(input.indexOf(" ")+1);
+
+        switch (type){
+            case "ball1":
+                // Bal 1
+            case "ball2":
+                // Bal 2
+            case "ball3":
+                // Bal 3
+            case "ball4":
+                // Bal 4
+            case "ball5":
+                // Bal 5
+            case "ball6":
+                // Bal 6
+            case "ball7":
+                // Bal 7
+            case "ball8":
+                // Bal 8
+            case "ball9":
+                // Bal 9
+            case "ball10":
+                // Bal 10
+            case "ball11":
+                // Bal 11
+            case "ball12":
+                // Bal 12
+            case "ball13":
+                // Bal 13
+            case "ball14":
+                // Bal 14
+            case "ball15":
+                // Bal 15
+            case "ballw":
+                // Bal wit
+        }
     }
 
     private void send(Socket socket) throws IOException {
