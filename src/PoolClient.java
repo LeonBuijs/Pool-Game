@@ -8,9 +8,7 @@ import org.jfree.fx.ResizableCanvas;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -19,7 +17,6 @@ import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 public class PoolClient extends Application {
     private ResizableCanvas canvas;
     private BufferedImage image;
-    private ArrayList<GameObject> gameObjects = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -66,6 +63,10 @@ public class PoolClient extends Application {
 
     private void receive(Socket socket) throws IOException {
         InputStream inputStream = socket.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String input = bufferedReader.readLine();
+        String type = input.substring(0, input.indexOf(" "));
+        String data = input.substring(input.indexOf(" ")+1);
     }
 
     private void send(Socket socket) throws IOException {
