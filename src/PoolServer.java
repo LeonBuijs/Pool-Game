@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.Force;
@@ -12,7 +13,12 @@ import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import javax.management.monitor.GaugeMonitor;
+
 public class PoolServer {
+    private World world;
+    private ArrayList<GameObject> gameObjects = new ArrayList<>();
+
     public static void main(String[] args) throws IOException {
         System.out.println("Server");
         ServerSocket serverSocket = new ServerSocket(2001);
@@ -47,5 +53,10 @@ public class PoolServer {
 
     private static void send(Socket socket) throws IOException {
         OutputStream outputStream = socket.getOutputStream();
+    }
+
+    private void init() {
+        world = new World();
+        world.setGravity(new Vector2(0, 0));
     }
 }
