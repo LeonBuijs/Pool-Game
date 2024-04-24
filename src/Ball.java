@@ -47,6 +47,8 @@ public class Ball {
     }
 
     public void draw(FXGraphics2D g){
-        g.drawImage(this.image, this.x-(this.image.getWidth()/2), this.y-(this.image.getHeight()/2), null);
+        g.scale(0.2,0.2);
+        g.drawImage(this.image, (this.x*5)-(this.image.getWidth()/2), (this.y*5)-(this.image.getHeight()/2), null);
+        g.scale(5,5);
     }
 }
