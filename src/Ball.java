@@ -1,7 +1,10 @@
+import java.awt.image.BufferedImage;
+
 public class Ball {
     private int x;
     private int y;
     private boolean potted;
+    private BufferedImage image;
 
     public Ball() {
         this.x = 0;
@@ -31,5 +34,13 @@ public class Ball {
 
     public void setPotted(boolean potted) {
         this.potted = potted;
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 }
