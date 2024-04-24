@@ -1,3 +1,5 @@
+import org.jfree.fx.FXGraphics2D;
+
 import java.awt.image.BufferedImage;
 
 public class Ball {
@@ -42,5 +44,9 @@ public class Ball {
 
     public void setImage(BufferedImage image) {
         this.image = image;
+    }
+
+    public void draw(FXGraphics2D g){
+        g.drawImage(this.image, this.x-(this.image.getWidth()/2), this.y-(this.image.getHeight()/2), null);
     }
 }
