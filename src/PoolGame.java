@@ -24,9 +24,10 @@ public class PoolGame extends Application {
     private ResizableCanvas canvas;
     private World world;
     private List<GameObject> gameObjectList = new ArrayList<>();
-    private boolean debugSelected = false;
+    private boolean debugSelected = true;//fixme op false zetten
     private BufferedImage image;
     private List<GameObject> balls = new ArrayList<>();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -60,7 +61,8 @@ public class PoolGame extends Application {
         primaryStage.show();
         draw(g2d);
     }
-    public void init(){
+
+    public void init() {
         try {
             image = ImageIO.read(getClass().getResource("Pooltafel.png"));
         } catch (IOException e) {
@@ -70,7 +72,7 @@ public class PoolGame extends Application {
         this.world = new World();
         world.setGravity(new Vector2(0, 0));
 
-//        createBalls();
+        createBalls();
 
         // Wall Left
         Body wallLeft = new Body();
@@ -87,18 +89,20 @@ public class PoolGame extends Application {
     }
 
     private void draw(FXGraphics2D g) {
-        g.drawImage(image, (1600-image.getWidth())/2,(900-image.getHeight())/2, null);
+        g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
+        for (GameObject gameObject : gameObjectList) {
+            gameObject.draw(g);
+        }
         if (debugSelected) {
             g.setColor(Color.blue);
             DebugDraw.draw(g, world, 1);
         }
-        for (GameObject gameObject : gameObjectList) {
-            gameObject.draw(g);
-        }
     }
-    private void update(double deltaTime){
+
+    private void update(double deltaTime) {
         world.update(deltaTime);
     }
+
     private void createBalls() {
 //        ballWhite.setImage(ImageIO.read(getClass().getResource("balls/ball_white.png")));
 //        balls.get(0).setImage(ImageIO.read(getClass().getResource("balls/ball_1.png")));
@@ -119,10 +123,27 @@ public class PoolGame extends Application {
 
         for (int i = 0; i < 16; i++) {
             Body ball = new Body();
-            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));//todo radius goed zetten
+            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(10));//todo radius goed zetten
             ballFix.setRestitution(0.3);
             ball.addFixture(ballFix);
             ball.setGravityScale(0);
+            ball.setMass(MassType.NORMAL);
+            ball.setBullet(true);//voorkomt clipping
+
+            GameObject ballObject;
+            if (i == 0) {
+                ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 1);
+//                world.addBody(ball);
+//                gameObjectList.add(ballObject);
+//                balls.add(ballObject);
+            } else {
+                ballObject = new GameObject("balls/ball_" + i + ".png", ball, new Vector2(0, 0), 0.1);
+            }
+//            ball.translate(new Vector2(1, 1));
+            ball.translateToOrigin();
+            world.addBody(ball);
+            gameObjectList.add(ballObject);
+            balls.add(ballObject);
         }
     }
 }
