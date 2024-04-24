@@ -25,22 +25,22 @@ public class PoolClient extends Application {
             Ball ball = new Ball();
             balls.add(ball);
         }
-        ballWhite.setImage(ImageIO.read(getClass().getResource("ball_white.png")));
-        balls.get(0).setImage(ImageIO.read(getClass().getResource("ball_1.png")));
-        balls.get(1).setImage(ImageIO.read(getClass().getResource("ball_2.png")));
-        balls.get(2).setImage(ImageIO.read(getClass().getResource("ball_3.png")));
-        balls.get(3).setImage(ImageIO.read(getClass().getResource("ball_4.png")));
-        balls.get(4).setImage(ImageIO.read(getClass().getResource("ball_5.png")));
-        balls.get(5).setImage(ImageIO.read(getClass().getResource("ball_6.png")));
-        balls.get(6).setImage(ImageIO.read(getClass().getResource("ball_7.png")));
-        balls.get(7).setImage(ImageIO.read(getClass().getResource("ball_8.png")));
-        balls.get(8).setImage(ImageIO.read(getClass().getResource("ball_9.png")));
-        balls.get(9).setImage(ImageIO.read(getClass().getResource("ball_10.png")));
-        balls.get(10).setImage(ImageIO.read(getClass().getResource("ball_11.png")));
-        balls.get(11).setImage(ImageIO.read(getClass().getResource("ball_12.png")));
-        balls.get(12).setImage(ImageIO.read(getClass().getResource("ball_13.png")));
-        balls.get(13).setImage(ImageIO.read(getClass().getResource("ball_14.png")));
-        balls.get(14).setImage(ImageIO.read(getClass().getResource("ball_15.png")));
+        ballWhite.setImage(ImageIO.read(getClass().getResource("balls/ball_white.png")));
+        balls.get(0).setImage(ImageIO.read(getClass().getResource("balls/ball_1.png")));
+        balls.get(1).setImage(ImageIO.read(getClass().getResource("balls/ball_2.png")));
+        balls.get(2).setImage(ImageIO.read(getClass().getResource("balls/ball_3.png")));
+        balls.get(3).setImage(ImageIO.read(getClass().getResource("balls/ball_4.png")));
+        balls.get(4).setImage(ImageIO.read(getClass().getResource("balls/ball_5.png")));
+        balls.get(5).setImage(ImageIO.read(getClass().getResource("balls/ball_6.png")));
+        balls.get(6).setImage(ImageIO.read(getClass().getResource("balls/ball_7.png")));
+        balls.get(7).setImage(ImageIO.read(getClass().getResource("balls/ball_8.png")));
+        balls.get(8).setImage(ImageIO.read(getClass().getResource("balls/ball_9.png")));
+        balls.get(9).setImage(ImageIO.read(getClass().getResource("balls/ball_10.png")));
+        balls.get(10).setImage(ImageIO.read(getClass().getResource("balls/ball_11.png")));
+        balls.get(11).setImage(ImageIO.read(getClass().getResource("balls/ball_12.png")));
+        balls.get(12).setImage(ImageIO.read(getClass().getResource("balls/ball_13.png")));
+        balls.get(13).setImage(ImageIO.read(getClass().getResource("balls/ball_14.png")));
+        balls.get(14).setImage(ImageIO.read(getClass().getResource("balls/ball_15.png")));
     }
 
     @Override
