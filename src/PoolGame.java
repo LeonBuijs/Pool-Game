@@ -19,6 +19,7 @@ import org.jfree.fx.ResizableCanvas;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,10 +31,13 @@ public class PoolGame extends Application {
     private List<GameObject> gameObjectList = new ArrayList<>();
     private boolean debugSelected = true;//fixme op false zetten
     private BufferedImage image;
+    private BufferedImage imageCue;
     private List<Body> balls = new ArrayList<Body>();
     private List<Ball> Ballz = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
+    Slider sliderRotation;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -48,7 +52,7 @@ public class PoolGame extends Application {
         HBox power = new HBox(labelPower, sliderPower);
         power.setSpacing(10);
 
-        Slider sliderRotation = new Slider(0, 360, 180);
+        sliderRotation = new Slider(0, 360, 180);
         Label labelRotation = new Label("Rotation: ");
         HBox rotation = new HBox(labelRotation, sliderRotation);
         rotation.setSpacing(10);
@@ -85,6 +89,7 @@ public class PoolGame extends Application {
     public void init() {
         try {
             image = ImageIO.read(getClass().getResource("Pooltafel.png"));
+            imageCue = ImageIO.read(getClass().getResource("cue.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -219,7 +224,15 @@ public class PoolGame extends Application {
     }
 
     private void draw(FXGraphics2D g) {
+        AffineTransform original = g.getTransform();
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
+        AffineTransform cueTransform = new AffineTransform();
+        cueTransform.translate(balls.get(0).getTransform().getTranslationX(), balls.get(0).getTransform().getTranslationY());
+        cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
+        cueTransform.scale(0.15, 0.15);
+        g.setTransform(cueTransform);
+        g.drawImage(imageCue, 75,-40, null);
+        g.setTransform(original);
         for (GameObject gameObject : gameObjectList) {
             gameObject.draw(g);
         }
