@@ -1,6 +1,7 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -59,12 +60,13 @@ public class PoolGame extends Application {
         HBox rotation = new HBox(labelRotation, sliderRotation);
         rotation.setSpacing(10);
 
+        Button fireButton = new Button("Fire");
 
         javafx.scene.control.CheckBox showDebug = new CheckBox("Show debug");
         showDebug.setOnAction(e -> {
             debugSelected = showDebug.isSelected();
         });
-        HBox hbox = new HBox(showDebug, power, rotation);
+        HBox hbox = new HBox(showDebug, power, rotation, fireButton);
         hbox.setSpacing(100);
         mainPane.setTop(hbox);
 
