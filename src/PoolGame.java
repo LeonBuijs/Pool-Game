@@ -204,23 +204,23 @@ public class PoolGame extends Application {
         double baseX = 98;
         double baseY = 45;
         double offsetX = 1.72;
-        double offsetY = 2;
+        double offsetY = 1;
 
         balls.get(1).translate(new Vector2(baseX, baseY));
-        balls.get(2).translate(new Vector2(baseX + offsetX, baseY + offsetY * 0.5));
-        balls.get(3).translate(new Vector2(baseX + offsetX, baseY - offsetY * 0.5));
-        balls.get(4).translate(new Vector2());
-        balls.get(5).translate(new Vector2());
-        balls.get(6).translate(new Vector2());
-        balls.get(7).translate(new Vector2());
+        balls.get(2).translate(new Vector2(baseX + offsetX, baseY + offsetY));
+        balls.get(3).translate(new Vector2(baseX + offsetX, baseY - offsetY));
+        balls.get(4).translate(new Vector2(baseX + offsetX * 2, baseY + offsetY * 2));
         balls.get(8).translate(new Vector2(baseX + offsetX * 2, baseY));
-        balls.get(9).translate(new Vector2());
-        balls.get(10).translate(new Vector2());
-        balls.get(11).translate(new Vector2());
-        balls.get(12).translate(new Vector2());
-        balls.get(13).translate(new Vector2());
-        balls.get(14).translate(new Vector2());
-        balls.get(15).translate(new Vector2());
+        balls.get(5).translate(new Vector2(baseX + offsetX * 2, baseY - offsetY * 2));
+        balls.get(6).translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 3));
+        balls.get(7).translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 1));
+        balls.get(9).translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 1));
+        balls.get(10).translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 3));
+        balls.get(11).translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 4));
+        balls.get(12).translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 2));
+        balls.get(13).translate(new Vector2(baseX + offsetX * 4, baseY));
+        balls.get(14).translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 2));
+        balls.get(15).translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 4));
     }
 
     private void shootBall() {
