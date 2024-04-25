@@ -107,6 +107,8 @@ public class PoolGame extends Application {
     }
 
     private void draw(FXGraphics2D g) {
+        g.setTransform(new AffineTransform());
+        g.clearRect(0,0, (int) canvas.getWidth(), (int) canvas.getHeight());
         AffineTransform original = g.getTransform();
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
         AffineTransform cueTransform = new AffineTransform();
@@ -180,17 +182,18 @@ public class PoolGame extends Application {
         //witte ball
         balls.get(0).translate(new Vector2(590, 450));
         //de rest van de ballen
-        //optimale afstand = 20
-        int offsetX = 980;
-        int offsetY = 450;
-        balls.get(1).translate(new Vector2(offsetX, offsetY));
-        balls.get(2).translate(new Vector2(offsetX + 20, offsetY + 10));
-        balls.get(3).translate(new Vector2(offsetX + 20, offsetY - 10));
+        int baseX = 980;
+        int baseY = 450;
+        int offset = 20;
+
+        balls.get(1).translate(new Vector2(baseX, baseY));
+        balls.get(2).translate(new Vector2(baseX + offset, baseY + offset * 0.5));
+        balls.get(3).translate(new Vector2(baseX + offset, baseY - offset * 0.5));
         balls.get(4).translate(new Vector2());
         balls.get(5).translate(new Vector2());
         balls.get(6).translate(new Vector2());
         balls.get(7).translate(new Vector2());
-        balls.get(8).translate(new Vector2(offsetX + 40, offsetY));
+        balls.get(8).translate(new Vector2(baseX + offset * 2, baseY));
         balls.get(9).translate(new Vector2());
         balls.get(10).translate(new Vector2());
         balls.get(11).translate(new Vector2());
