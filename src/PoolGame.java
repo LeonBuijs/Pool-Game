@@ -258,6 +258,6 @@ public class PoolGame extends Application {
 
     private void resetBalls() {
         //todo alle ballen goed zetten
-        balls.get(0).translate(new Vector2(100, 100));
+        balls.get(0).translate(new Vector2(590, 450));
     }
 }
