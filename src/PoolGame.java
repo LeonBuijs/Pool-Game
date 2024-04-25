@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.Force;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
@@ -40,6 +41,7 @@ public class PoolGame extends Application {
     private Ball ballWhite;
     private Ball ballBlack;
     Slider sliderRotation;
+    Slider sliderPower;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -49,7 +51,7 @@ public class PoolGame extends Application {
         mainPane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
-        Slider sliderPower = new Slider(0, 100, 0);
+        sliderPower = new Slider(0, 100, 0);
         sliderPower.setShowTickLabels(true);
         Label labelPower = new Label("Power: ");
         HBox power = new HBox(labelPower, sliderPower);
@@ -61,6 +63,7 @@ public class PoolGame extends Application {
         rotation.setSpacing(10);
 
         Button fireButton = new Button("Fire");
+        fireButton.setOnAction(event -> shootBall());
 
         javafx.scene.control.CheckBox showDebug = new CheckBox("Show debug");
         showDebug.setOnAction(e -> {
@@ -201,6 +204,14 @@ public class PoolGame extends Application {
         balls.get(13).translate(new Vector2());
         balls.get(14).translate(new Vector2());
         balls.get(15).translate(new Vector2());
+    }
+
+    private void shootBall() {
+        int rotation = (int) sliderRotation.getValue();
+        int power = (int) sliderPower.getValue();
+
+        balls.get(0).applyForce(new Force(balls.get(0).getTransform().getTranslationX(),
+                balls.get(0).getTransform().getTranslationY()));
     }
 
     private void createWalls() {
