@@ -57,6 +57,7 @@ public class Ball {
     private BallType ballType;
     private Body ball;
     private GameObject ballObject;
+    private boolean running = false;
 
     public Ball(BallType ballType, Body ball, GameObject ballObject) {
         this.ballType = ballType;
@@ -65,11 +66,18 @@ public class Ball {
     }
 
     public void update() {
+        Vector2 vector2 = ball.getChangeInPosition();
+        if (!running) {
+            ball.applyForce(new Vector2(0,0));
+            running = true;
+        } else {
+            ball.applyImpulse(new Vector2(-vector2.x * 2, -vector2.y * 2));
+        }
 //        if (ballType.equals(BallType.WHITE)) {
-            System.out.println(ball.getChangeInPosition());
-            ball.setMass(MassType.NORMAL);
-            Vector2 vector2 = ball.getChangeInPosition();
-//            ball.applyImpulse(new Vector2(-vector2.x * 1, -vector2.y * 1));
+////            System.out.println(ball.getChangeInPosition());
+//            System.out.println(ball.getChangeInOrientation());
+//
+//
 //        }
     }
 

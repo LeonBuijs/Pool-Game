@@ -159,11 +159,11 @@ public class PoolGame extends Application {
     private void createBalls() {
         for (int i = 0; i < 16; i++) {
             Body ballBody = new Body();
-            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));//todo radius goed zetten
+            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
             ballFix.setRestitution(0.3);
             ballBody.addFixture(ballFix);
             ballBody.setGravityScale(0);
-            ballBody.setMass(MassType.INFINITE);//masstype wordt in update aangepast, dit om bewegen tijdens inspawnen te voorkomen
+            ballBody.setMass(MassType.NORMAL);
 
             //gameobjects maken
             GameObject ballObject;
