@@ -37,6 +37,7 @@ public class PoolGame extends Application {
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
     Slider sliderRotation;
+    Slider sliderRotation;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
