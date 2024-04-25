@@ -14,7 +14,7 @@ import java.awt.geom.Point2D;
  */
 public class Camera {
 	private Point2D centerPoint = new Point2D.Double(0,0);
-	private double zoom = 1;
+	private double zoom = 7;//custom zoom property
 	private double rotation = 0;
 	private Point2D lastMousePos;
 	private Canvas canvas;
@@ -35,7 +35,7 @@ public class Camera {
 
 	public AffineTransform getTransform(int windowWidth, int windowHeight)  {
 		AffineTransform tx = new AffineTransform();
-		tx.translate(windowWidth/2, windowHeight/2);
+		tx.translate(windowWidth * 0.2, windowHeight * 0.2);//centreren van pool tafel fixme mogelijk
 		tx.scale(zoom, zoom);
 		tx.translate(centerPoint.getX(), centerPoint.getY());
 		tx.rotate(rotation);
