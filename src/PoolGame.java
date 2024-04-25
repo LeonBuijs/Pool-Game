@@ -160,7 +160,8 @@ public class PoolGame extends Application {
         for (int i = 0; i < 16; i++) {
             Body ballBody = new Body();
             BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
-            ballFix.setRestitution(0.3);
+            ballFix.setRestitution(0.1);
+            ballBody.setAngularDamping(1);
             ballBody.addFixture(ballFix);
             ballBody.setGravityScale(0);
             ballBody.setMass(MassType.NORMAL);

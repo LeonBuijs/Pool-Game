@@ -71,13 +71,14 @@ public class Ball {
             ball.applyForce(new Vector2(0,0));
             running = true;
         } else {
-            ball.applyImpulse(new Vector2(-vector2.x * 2, -vector2.y * 2));
+            ball.applyImpulse(new Vector2(-vector2.x * 3, -vector2.y * 3));
         }
+//          todo dit als checker te gebruiken om te kijken of alle ballen stil liggen.
+//        if (vector2.x < -1.0e-3 || vector2.x > 1.0e-3 && vector2.y < -1.0e-3 || vector2.y> 1.0e-3) {
+
+//        test sout
 //        if (ballType.equals(BallType.WHITE)) {
-////            System.out.println(ball.getChangeInPosition());
 //            System.out.println(ball.getChangeInOrientation());
-//
-//
 //        }
     }
 
