@@ -31,7 +31,9 @@ public class PoolGame extends Application {
     private boolean debugSelected = true;//fixme op false zetten
     private BufferedImage image;
     private List<Body> balls = new ArrayList<Body>();
-
+    private List<Ball> Ballz = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
+    private List<Ball> ballsWhole = new ArrayList<>();
+    private List<Ball> ballsHalf = new ArrayList<>();
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -242,11 +244,21 @@ public class PoolGame extends Application {
             ball.setBullet(true);//voorkomt clipping
 
             GameObject ballObject;
-            //witte bal
+
             if (i == 0) {
                 ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 0.1);
             } else {
                 ballObject = new GameObject("balls/ball_" + i + ".png", ball, new Vector2(0, 0), 0.1);
+            }
+            //todo soorten ballen in aparte ArrayList zetten.
+            if (i == 0) {
+                Ballz.add(new Ball(Ball.BallType.WHITE, ball, ballObject));
+            } else if (i < 8) {
+                Ballz.add(new Ball(Ball.BallType.WHOLE, ball, ballObject));
+            } else if (i == 8) {
+                Ballz.add(new Ball(Ball.BallType.BLACK, ball, ballObject));
+            } else {
+                Ballz.add(new Ball(Ball.BallType.HALF, ball, ballObject));
             }
 
             world.addBody(ball);
