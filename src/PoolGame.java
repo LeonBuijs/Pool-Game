@@ -2,7 +2,11 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
@@ -36,11 +40,25 @@ public class PoolGame extends Application {
         mainPane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
+        Slider sliderPower = new Slider(0, 100, 0);
+        sliderPower.setShowTickLabels(true);
+        Label labelPower = new Label("Power: ");
+        HBox power = new HBox(labelPower, sliderPower);
+        power.setSpacing(10);
+
+        Slider sliderRotation = new Slider(0, 360, 180);
+        Label labelRotation = new Label("Rotation: ");
+        HBox rotation = new HBox(labelRotation, sliderRotation);
+        rotation.setSpacing(10);
+
+
         javafx.scene.control.CheckBox showDebug = new CheckBox("Show debug");
         showDebug.setOnAction(e -> {
             debugSelected = showDebug.isSelected();
         });
-        mainPane.setTop(showDebug);
+        HBox hbox = new HBox(showDebug, power, rotation);
+        hbox.setSpacing(100);
+        mainPane.setTop(hbox);
 
         new AnimationTimer() {
             long last = -1;
@@ -125,6 +143,12 @@ public class PoolGame extends Application {
         corner12.getTransform().setTranslation(371, 187);
         corner12.setMass(MassType.INFINITE);
         world.addBody(corner12);
+        // Corner1.3
+        Body corner13 = new Body();
+        corner13.addFixture(Geometry.createTriangle(new Vector2(50,50), new Vector2(0,0), new Vector2(50,0)));
+        corner13.getTransform().setTranslation(371, 187);
+        corner13.setMass(MassType.INFINITE);
+        world.addBody(corner13);
 
         // Corner2.1
         Body corner21 = new Body();
