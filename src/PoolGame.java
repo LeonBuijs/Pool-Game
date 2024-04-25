@@ -99,7 +99,70 @@ public class PoolGame extends Application {
         world.setGravity(new Vector2(0, 0));
 
         createBalls();
+        createWalls();
 
+    }
+
+
+
+    private void draw(FXGraphics2D g) {
+        AffineTransform original = g.getTransform();
+        g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
+        AffineTransform cueTransform = new AffineTransform();
+        cueTransform.translate(balls.get(0).getTransform().getTranslationX(), balls.get(0).getTransform().getTranslationY());
+        cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
+        cueTransform.scale(0.15, 0.15);
+        g.setTransform(cueTransform);
+        g.drawImage(imageCue, 75,-40, null);
+        g.setTransform(original);
+        for (GameObject gameObject : gameObjectList) {
+            gameObject.draw(g);
+        }
+        if (debugSelected) {
+            g.setColor(Color.blue);
+            DebugDraw.draw(g, world, 1);
+        }
+    }
+
+    private void update(double deltaTime) {
+        world.update(deltaTime);
+    }
+
+    private void createBalls() {
+        for (int i = 0; i < 16; i++) {
+            Body ball = new Body();
+            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(10));//todo radius goed zetten
+            ballFix.setRestitution(0.3);
+            ball.addFixture(ballFix);
+            ball.setGravityScale(0);
+            ball.setMass(MassType.NORMAL);
+            ball.setBullet(true);//voorkomt clipping
+
+            GameObject ballObject;
+
+            if (i == 0) {
+                ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 0.1);
+            } else {
+                ballObject = new GameObject("balls/ball_" + i + ".png", ball, new Vector2(0, 0), 0.1);
+            }
+            //todo soorten ballen in aparte ArrayList zetten.
+            if (i == 0) {
+                Ballz.add(new Ball(Ball.BallType.WHITE, ball, ballObject));
+            } else if (i < 8) {
+                Ballz.add(new Ball(Ball.BallType.WHOLE, ball, ballObject));
+            } else if (i == 8) {
+                Ballz.add(new Ball(Ball.BallType.BLACK, ball, ballObject));
+            } else {
+                Ballz.add(new Ball(Ball.BallType.HALF, ball, ballObject));
+            }
+
+            world.addBody(ball);
+            gameObjectList.add(ballObject);
+            balls.add(ball);
+        }
+        resetBalls();
+    }
+    private void createWalls() {
         // Wall Left
         Body wallLeft = new Body();
         wallLeft.addFixture(Geometry.createRectangle(50, 350));
@@ -222,64 +285,6 @@ public class PoolGame extends Application {
         corner62.getTransform().setTranslation(371, 663);
         corner62.setMass(MassType.INFINITE);
         world.addBody(corner62);
-    }
-
-    private void draw(FXGraphics2D g) {
-        AffineTransform original = g.getTransform();
-        g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
-        AffineTransform cueTransform = new AffineTransform();
-        cueTransform.translate(balls.get(0).getTransform().getTranslationX(), balls.get(0).getTransform().getTranslationY());
-        cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
-        cueTransform.scale(0.15, 0.15);
-        g.setTransform(cueTransform);
-        g.drawImage(imageCue, 75,-40, null);
-        g.setTransform(original);
-        for (GameObject gameObject : gameObjectList) {
-            gameObject.draw(g);
-        }
-        if (debugSelected) {
-            g.setColor(Color.blue);
-            DebugDraw.draw(g, world, 1);
-        }
-    }
-
-    private void update(double deltaTime) {
-        world.update(deltaTime);
-    }
-
-    private void createBalls() {
-        for (int i = 0; i < 16; i++) {
-            Body ball = new Body();
-            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(10));//todo radius goed zetten
-            ballFix.setRestitution(0.3);
-            ball.addFixture(ballFix);
-            ball.setGravityScale(0);
-            ball.setMass(MassType.NORMAL);
-            ball.setBullet(true);//voorkomt clipping
-
-            GameObject ballObject;
-
-            if (i == 0) {
-                ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 0.1);
-            } else {
-                ballObject = new GameObject("balls/ball_" + i + ".png", ball, new Vector2(0, 0), 0.1);
-            }
-            //todo soorten ballen in aparte ArrayList zetten.
-            if (i == 0) {
-                Ballz.add(new Ball(Ball.BallType.WHITE, ball, ballObject));
-            } else if (i < 8) {
-                Ballz.add(new Ball(Ball.BallType.WHOLE, ball, ballObject));
-            } else if (i == 8) {
-                Ballz.add(new Ball(Ball.BallType.BLACK, ball, ballObject));
-            } else {
-                Ballz.add(new Ball(Ball.BallType.HALF, ball, ballObject));
-            }
-
-            world.addBody(ball);
-            gameObjectList.add(ballObject);
-            balls.add(ball);
-        }
-        resetBalls();
     }
 
     private void resetBalls() {
