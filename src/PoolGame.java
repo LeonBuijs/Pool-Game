@@ -175,7 +175,27 @@ public class PoolGame extends Application {
 
     private void resetBalls() {
         //todo alle ballen goed zetten
+        //witte ball
         balls.get(0).translate(new Vector2(590, 450));
+        //de rest van de ballen
+        //optimale afstand = 20
+        int offsetX = 980;
+        int offsetY = 450;
+        balls.get(1).translate(new Vector2(offsetX, offsetY));
+        balls.get(2).translate(new Vector2(offsetX + 20, offsetY + 10));
+        balls.get(3).translate(new Vector2(offsetX + 20, offsetY - 10));
+        balls.get(4).translate(new Vector2());
+        balls.get(5).translate(new Vector2());
+        balls.get(6).translate(new Vector2());
+        balls.get(7).translate(new Vector2());
+        balls.get(8).translate(new Vector2(offsetX + 40, offsetY));
+        balls.get(9).translate(new Vector2());
+        balls.get(10).translate(new Vector2());
+        balls.get(11).translate(new Vector2());
+        balls.get(12).translate(new Vector2());
+        balls.get(13).translate(new Vector2());
+        balls.get(14).translate(new Vector2());
+        balls.get(15).translate(new Vector2());
     }
 
     private void createWalls() {
