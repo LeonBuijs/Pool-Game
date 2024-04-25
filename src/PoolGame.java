@@ -40,8 +40,8 @@ public class PoolGame extends Application {
     private List<Ball> ballsHalf = new ArrayList<>();
     private Ball ballWhite;
     private Ball ballBlack;
-    Slider sliderRotation;
-    Slider sliderPower;
+    Slider sliderRotation = new Slider(0, 360, 180);
+    Slider sliderPower = new Slider(0, 100, 0);
     private Camera camera;
     private MousePicker mousePicker;
 
@@ -57,14 +57,11 @@ public class PoolGame extends Application {
 
         mousePicker = new MousePicker(canvas);
 
-        Slider sliderPower = new Slider(0, 100, 0);
-        sliderPower = new Slider(0, 100, 0);
         sliderPower.setShowTickLabels(true);
         Label labelPower = new Label("Power: ");
         HBox power = new HBox(labelPower, sliderPower);
         power.setSpacing(10);
 
-        sliderRotation = new Slider(0, 360, 180);
         Label labelRotation = new Label("Rotation: ");
         HBox rotation = new HBox(labelRotation, sliderRotation);
         rotation.setSpacing(10);
@@ -129,7 +126,7 @@ public class PoolGame extends Application {
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
 
         AffineTransform cueTransform = new AffineTransform(txZoom);
-        cueTransform.translate(balls.get(0).getTransform().getTranslationX(), balls.get(0).getTransform().getTranslationY());
+        cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
         cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
         cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
@@ -224,11 +221,13 @@ public class PoolGame extends Application {
     }
 
     private void shootBall() {
-        int rotation = (int) sliderRotation.getValue();
+        int rotation = (int) sliderRotation.getValue() + 180;
         int power = (int) sliderPower.getValue();
 
-        balls.get(0).applyForce(new Force(balls.get(0).getTransform().getTranslationX(),
-                balls.get(0).getTransform().getTranslationY()));
+        double x = (Math.cos(Math.toRadians(rotation))*power*1000);
+        double y = (Math.sin(Math.toRadians(rotation))*power*1000);
+
+        balls.get(0).applyForce(new Force(x,y));
     }
 
     private void createWalls() {
