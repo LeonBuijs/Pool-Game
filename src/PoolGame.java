@@ -126,7 +126,7 @@ public class PoolGame extends Application {
         g.setTransform(txZoom);
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
 
-        if (showCue) {
+//        if (showCue) {
             AffineTransform cueTransform = new AffineTransform(txZoom);
             cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
             cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
@@ -134,7 +134,11 @@ public class PoolGame extends Application {
 //        cueTransform.scale(0.01, 0.01);
             g.setTransform(cueTransform);
             g.drawImage(imageCue, 75,-40, null);
-        }
+            g.setColor(Color.white);
+            g.setStroke(new BasicStroke(10));
+            g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.01),0);
+
+//        }
 
 
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
@@ -236,8 +240,8 @@ public class PoolGame extends Application {
         int rotation = (int) sliderRotation.getValue() + 180;
         int power = (int) sliderPower.getValue();
 
-        double x = (Math.cos(Math.toRadians(rotation))*power*1000);
-        double y = (Math.sin(Math.toRadians(rotation))*power*1000);
+        double x = (Math.cos(Math.toRadians(rotation))*power*10000);
+        double y = (Math.sin(Math.toRadians(rotation))*power*10000);
 
         balls.get(0).applyForce(new Force(x,y));
     }
