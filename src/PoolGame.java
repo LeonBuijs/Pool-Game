@@ -35,7 +35,7 @@ public class PoolGame extends Application {
     private BufferedImage image;
     private BufferedImage imageCue;
     private List<Body> balls = new ArrayList<Body>();
-    private List<Ball> Ballz = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
+    private List<Ball> ballObjectList = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
     private Ball ballWhite;
@@ -150,6 +150,10 @@ public class PoolGame extends Application {
     private void update(double deltaTime) {
         world.update(deltaTime);
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 1);
+
+        for (Ball ball : ballObjectList) {
+            ball.update();
+        }
     }
 
     private void createBalls() {
@@ -159,7 +163,7 @@ public class PoolGame extends Application {
             ballFix.setRestitution(0.3);
             ballBody.addFixture(ballFix);
             ballBody.setGravityScale(0);
-            ballBody.setMass(MassType.NORMAL);
+            ballBody.setMass(MassType.INFINITE);//masstype wordt in update aangepast, dit om bewegen tijdens inspawnen te voorkomen
 
             //gameobjects maken
             GameObject ballObject;
@@ -171,24 +175,22 @@ public class PoolGame extends Application {
             }
 
             //toevoegen aan lijsten
+            Ball ball;
             if (i == 0) {
-                Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i < 8) {
-                Ball ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i == 8) {
-                Ball ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
                 ballWhite = ball;
             } else {
-                Ball ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
                 ballWhite = ball;
             }
 
+            ballObjectList.add(ball);
             world.addBody(ballBody);
             gameObjectList.add(ballObject);
             balls.add(ballBody);

@@ -1,4 +1,6 @@
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.image.BufferedImage;
@@ -60,6 +62,15 @@ public class Ball {
         this.ballType = ballType;
         this.ball = ball;
         this.ballObject = ballObject;
+    }
+
+    public void update() {
+//        if (ballType.equals(BallType.WHITE)) {
+            System.out.println(ball.getChangeInPosition());
+            ball.setMass(MassType.NORMAL);
+            Vector2 vector2 = ball.getChangeInPosition();
+//            ball.applyImpulse(new Vector2(-vector2.x * 1, -vector2.y * 1));
+//        }
     }
 
     public BallType getBallType() {
