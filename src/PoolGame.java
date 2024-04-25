@@ -44,6 +44,7 @@ public class PoolGame extends Application {
     Slider sliderPower = new Slider(0, 100, 0);
     private Camera camera;
     private MousePicker mousePicker;
+    private boolean showCue = true;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -125,13 +126,16 @@ public class PoolGame extends Application {
         g.setTransform(txZoom);
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
 
-        AffineTransform cueTransform = new AffineTransform(txZoom);
-        cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
-        cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
-        cueTransform.scale(0.15, 0.15);
+        if (showCue) {
+            AffineTransform cueTransform = new AffineTransform(txZoom);
+            cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
+            cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
+            cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
-        g.setTransform(cueTransform);
-        g.drawImage(imageCue, 75,-40, null);
+            g.setTransform(cueTransform);
+            g.drawImage(imageCue, 75,-40, null);
+        }
+
 
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
 
@@ -148,9 +152,17 @@ public class PoolGame extends Application {
         world.update(deltaTime);
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 1);
 
+        boolean temp = true;
         for (Ball ball : ballObjectList) {
             ball.update();
+            if (ball.checkRolling()){
+                temp = false;
+            }
         }
+        if (ballWhite.checkRolling()){
+            temp = false;
+        }
+        this.showCue = temp;
     }
 
     private void createBalls() {
