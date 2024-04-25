@@ -36,6 +36,8 @@ public class PoolGame extends Application {
     private List<Ball> Ballz = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
+    private Ball ballWhite;
+    private Ball ballBlack;
     Slider sliderRotation;
 
     @Override
@@ -248,35 +250,46 @@ public class PoolGame extends Application {
 
     private void createBalls() {
         for (int i = 0; i < 16; i++) {
-            Body ball = new Body();
+            Body ballBody = new Body();
             BodyFixture ballFix = new BodyFixture(Geometry.createCircle(10));//todo radius goed zetten
             ballFix.setRestitution(0.3);
-            ball.addFixture(ballFix);
-            ball.setGravityScale(0);
-            ball.setMass(MassType.NORMAL);
-            ball.setBullet(true);//voorkomt clipping
+            ballBody.addFixture(ballFix);
+            ballBody.setGravityScale(0);
+            ballBody.setMass(MassType.NORMAL);
+            ballBody.setBullet(true);//voorkomt clipping
 
+
+            //gameobjects maken
             GameObject ballObject;
 
             if (i == 0) {
-                ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 0.1);
+                ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.13);
             } else {
-                ballObject = new GameObject("balls/ball_" + i + ".png", ball, new Vector2(0, 0), 0.1);
-            }
-            //todo soorten ballen in aparte ArrayList zetten.
-            if (i == 0) {
-                Ballz.add(new Ball(Ball.BallType.WHITE, ball, ballObject));
-            } else if (i < 8) {
-                Ballz.add(new Ball(Ball.BallType.WHOLE, ball, ballObject));
-            } else if (i == 8) {
-                Ballz.add(new Ball(Ball.BallType.BLACK, ball, ballObject));
-            } else {
-                Ballz.add(new Ball(Ball.BallType.HALF, ball, ballObject));
+                ballObject = new GameObject("balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.13);
             }
 
-            world.addBody(ball);
+            //toevoegen aan lijsten
+            if (i == 0) {
+                Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
+                Ballz.add(ball);
+                ballWhite = ball;
+            } else if (i < 8) {
+                Ball ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
+                Ballz.add(ball);
+                ballWhite = ball;
+            } else if (i == 8) {
+                Ball ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
+                Ballz.add(ball);
+                ballWhite = ball;
+            } else {
+                Ball ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
+                Ballz.add(ball);
+                ballWhite = ball;
+            }
+
+            world.addBody(ballBody);
             gameObjectList.add(ballObject);
-            balls.add(ball);
+            balls.add(ballBody);
         }
         resetBalls();
     }
