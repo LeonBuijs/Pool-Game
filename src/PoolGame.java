@@ -35,7 +35,7 @@ public class PoolGame extends Application {
     private BufferedImage image;
     private BufferedImage imageCue;
     private List<Body> balls = new ArrayList<Body>();
-    private List<Ball> Ballz = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
+    private List<Ball> ballObjectList = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
     private Ball ballWhite;
@@ -150,18 +150,22 @@ public class PoolGame extends Application {
     private void update(double deltaTime) {
         world.update(deltaTime);
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 1);
+
+        for (Ball ball : ballObjectList) {
+            ball.update();
+        }
     }
 
     private void createBalls() {
         for (int i = 0; i < 16; i++) {
             Body ballBody = new Body();
-            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));//todo radius goed zetten
-            ballFix.setRestitution(0.3);
+            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
+            ballFix.setRestitution(0.1);
+            ballBody.setAngularDamping(1);
             ballBody.addFixture(ballFix);
             ballBody.setGravityScale(0);
             ballBody.setMass(MassType.NORMAL);
 
-            //gameobjects maken
             GameObject ballObject;
 
             if (i == 0) {
@@ -171,24 +175,22 @@ public class PoolGame extends Application {
             }
 
             //toevoegen aan lijsten
+            Ball ball;
             if (i == 0) {
-                Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i < 8) {
-                Ball ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i == 8) {
-                Ball ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
                 ballWhite = ball;
             } else {
-                Ball ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
-                Ballz.add(ball);
+                ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
                 ballWhite = ball;
             }
 
+            ballObjectList.add(ball);
             world.addBody(ballBody);
             gameObjectList.add(ballObject);
             balls.add(ballBody);
@@ -197,30 +199,28 @@ public class PoolGame extends Application {
     }
 
     private void resetBalls() {
-        //todo alle ballen goed zetten
-        //witte ball
         balls.get(0).translate(new Vector2(59, 45));
-        //de rest van de ballen
+
         double baseX = 98;
         double baseY = 45;
         double offsetX = 1.72;
-        double offsetY = 2;
+        double offsetY = 1;
 
         balls.get(1).translate(new Vector2(baseX, baseY));
-        balls.get(2).translate(new Vector2(baseX + offsetX, baseY + offsetY * 0.5));
-        balls.get(3).translate(new Vector2(baseX + offsetX, baseY - offsetY * 0.5));
-        balls.get(4).translate(new Vector2());
-        balls.get(5).translate(new Vector2());
-        balls.get(6).translate(new Vector2());
-        balls.get(7).translate(new Vector2());
+        balls.get(2).translate(new Vector2(baseX + offsetX, baseY + offsetY));
+        balls.get(3).translate(new Vector2(baseX + offsetX, baseY - offsetY));
+        balls.get(4).translate(new Vector2(baseX + offsetX * 2, baseY + offsetY * 2));
         balls.get(8).translate(new Vector2(baseX + offsetX * 2, baseY));
-        balls.get(9).translate(new Vector2());
-        balls.get(10).translate(new Vector2());
-        balls.get(11).translate(new Vector2());
-        balls.get(12).translate(new Vector2());
-        balls.get(13).translate(new Vector2());
-        balls.get(14).translate(new Vector2());
-        balls.get(15).translate(new Vector2());
+        balls.get(5).translate(new Vector2(baseX + offsetX * 2, baseY - offsetY * 2));
+        balls.get(6).translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 3));
+        balls.get(7).translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 1));
+        balls.get(9).translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 1));
+        balls.get(10).translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 3));
+        balls.get(11).translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 4));
+        balls.get(12).translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 2));
+        balls.get(13).translate(new Vector2(baseX + offsetX * 4, baseY));
+        balls.get(14).translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 2));
+        balls.get(15).translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 4));
     }
 
     private void shootBall() {
