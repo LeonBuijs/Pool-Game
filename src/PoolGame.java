@@ -166,7 +166,6 @@ public class PoolGame extends Application {
             ballBody.setGravityScale(0);
             ballBody.setMass(MassType.NORMAL);
 
-            //gameobjects maken
             GameObject ballObject;
 
             if (i == 0) {
@@ -200,10 +199,8 @@ public class PoolGame extends Application {
     }
 
     private void resetBalls() {
-        //todo alle ballen goed zetten
-        //witte ball
         balls.get(0).translate(new Vector2(59, 45));
-        //de rest van de ballen
+
         double baseX = 98;
         double baseY = 45;
         double offsetX = 1.72;
