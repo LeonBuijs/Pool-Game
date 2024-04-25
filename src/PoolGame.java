@@ -26,7 +26,7 @@ public class PoolGame extends Application {
     private List<GameObject> gameObjectList = new ArrayList<>();
     private boolean debugSelected = true;//fixme op false zetten
     private BufferedImage image;
-    private List<GameObject> balls = new ArrayList<>();
+    private List<Body> balls = new ArrayList<Body>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -104,23 +104,6 @@ public class PoolGame extends Application {
     }
 
     private void createBalls() {
-//        ballWhite.setImage(ImageIO.read(getClass().getResource("balls/ball_white.png")));
-//        balls.get(0).setImage(ImageIO.read(getClass().getResource("balls/ball_1.png")));
-//        balls.get(1).setImage(ImageIO.read(getClass().getResource("balls/ball_2.png")));
-//        balls.get(2).setImage(ImageIO.read(getClass().getResource("balls/ball_3.png")));
-//        balls.get(3).setImage(ImageIO.read(getClass().getResource("balls/ball_4.png")));
-//        balls.get(4).setImage(ImageIO.read(getClass().getResource("balls/ball_5.png")));
-//        balls.get(5).setImage(ImageIO.read(getClass().getResource("balls/ball_6.png")));
-//        balls.get(6).setImage(ImageIO.read(getClass().getResource("balls/ball_7.png")));
-//        balls.get(7).setImage(ImageIO.read(getClass().getResource("balls/ball_8.png")));
-//        balls.get(8).setImage(ImageIO.read(getClass().getResource("balls/ball_9.png")));
-//        balls.get(9).setImage(ImageIO.read(getClass().getResource("balls/ball_10.png")));
-//        balls.get(10).setImage(ImageIO.read(getClass().getResource("balls/ball_11.png")));
-//        balls.get(11).setImage(ImageIO.read(getClass().getResource("balls/ball_12.png")));
-//        balls.get(12).setImage(ImageIO.read(getClass().getResource("balls/ball_13.png")));
-//        balls.get(13).setImage(ImageIO.read(getClass().getResource("balls/ball_14.png")));
-//        balls.get(14).setImage(ImageIO.read(getClass().getResource("balls/ball_15.png")));
-
         for (int i = 0; i < 16; i++) {
             Body ball = new Body();
             BodyFixture ballFix = new BodyFixture(Geometry.createCircle(10));//todo radius goed zetten
@@ -131,19 +114,22 @@ public class PoolGame extends Application {
             ball.setBullet(true);//voorkomt clipping
 
             GameObject ballObject;
+            //witte bal
             if (i == 0) {
-                ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 1);
-//                world.addBody(ball);
-//                gameObjectList.add(ballObject);
-//                balls.add(ballObject);
+                ballObject = new GameObject("balls/ball_white.png", ball, new Vector2(0, 0), 0.1);
             } else {
                 ballObject = new GameObject("balls/ball_" + i + ".png", ball, new Vector2(0, 0), 0.1);
             }
-//            ball.translate(new Vector2(1, 1));
-            ball.translateToOrigin();
+
             world.addBody(ball);
             gameObjectList.add(ballObject);
-            balls.add(ballObject);
+            balls.add(ball);
         }
+        resetBalls();
+    }
+
+    private void resetBalls() {
+        //todo alle ballen goed zetten
+        balls.get(0).translate(new Vector2(100, 100));
     }
 }

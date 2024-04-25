@@ -35,7 +35,7 @@ public class GameObject {
         }
 
         AffineTransform tx = new AffineTransform();
-        tx.translate(body.getTransform().getTranslationX() * 100, body.getTransform().getTranslationY() * 100);
+        tx.translate(body.getTransform().getTranslationX(), body.getTransform().getTranslationY());
         tx.rotate(body.getTransform().getRotation());
         tx.scale(scale, -scale);
         tx.translate(offset.x, offset.y);
