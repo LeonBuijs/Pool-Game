@@ -34,7 +34,7 @@ public class PoolGame extends Application {
     private boolean debugSelected = false;
     private BufferedImage image;
     private BufferedImage imageCue;
-    private List<Body> balls = new ArrayList<Body>();
+    private List<Body> balls = new ArrayList<>();
     private List<Ball> ballObjectList = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
@@ -133,7 +133,11 @@ public class PoolGame extends Application {
             cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
             g.setTransform(cueTransform);
-            g.drawImage(imageCue, 75,-40, null);
+
+            if (showCue) {
+                g.drawImage(imageCue, 75, -40, null);
+            }
+
             g.setColor(Color.white);
             g.setStroke(new BasicStroke(10));
             g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
@@ -156,17 +160,17 @@ public class PoolGame extends Application {
         world.update(deltaTime);
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 1);
 
-        boolean temp = true;
+        boolean toShowCue = true;
         for (Ball ball : ballObjectList) {
             ball.update();
             if (ball.checkRolling()){
-                temp = false;
+                toShowCue = false;
             }
         }
         if (ballWhite.checkRolling()){
-            temp = false;
+            toShowCue = false;
         }
-        this.showCue = temp;
+        this.showCue = toShowCue;
     }
 
     private void createBalls() {
@@ -195,13 +199,13 @@ public class PoolGame extends Application {
                 ballWhite = ball;
             } else if (i < 8) {
                 ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
-                ballWhite = ball;
+                ballsWhole.add(ball);
             } else if (i == 8) {
                 ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
-                ballWhite = ball;
+                ballBlack = ball;
             } else {
                 ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
-                ballWhite = ball;
+                ballsHalf.add(ball);
             }
 
             ballObjectList.add(ball);
