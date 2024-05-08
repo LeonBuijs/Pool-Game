@@ -136,7 +136,7 @@ public class PoolGame extends Application {
             g.drawImage(imageCue, 75,-40, null);
             g.setColor(Color.white);
             g.setStroke(new BasicStroke(10));
-            g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.01),0);
+            g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
 
 //        }
 
