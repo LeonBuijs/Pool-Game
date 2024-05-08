@@ -127,23 +127,20 @@ public class PoolGame extends Application {
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
 
 //        if (showCue) {
-            AffineTransform cueTransform = new AffineTransform(txZoom);
-            cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
-            cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
-            cueTransform.scale(0.15, 0.15);
+        AffineTransform cueTransform = new AffineTransform(txZoom);
+        cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
+        cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
+        cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
-            g.setTransform(cueTransform);
+        g.setTransform(cueTransform);
 
-            if (showCue) {
-                g.drawImage(imageCue, 75, -40, null);
-            }
+        g.setColor(Color.white);
 
-            g.setColor(Color.white);
+        if (showCue) {
+            g.drawImage(imageCue, 75, -40, null);
             g.setStroke(new BasicStroke(10));
             g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
-
-//        }
-
+        }
 
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
 
