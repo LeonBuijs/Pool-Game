@@ -18,13 +18,14 @@ public class Ball {
     }
 
     public void update() {
-        Vector2 vector2 = ball.getChangeInPosition();
+        Vector2 vector2 = ball.getLinearVelocity();
         if (!running) {
             ball.applyForce(new Vector2(0,0));
             running = true;
         } else {
-            ball.applyImpulse(new Vector2(-vector2.x * 2, -vector2.y * 2));
+            ball.applyImpulse(new Vector2(-vector2.x * 0.2, -vector2.y * 0.2));
         }
+
 //          todo dit als checker te gebruiken om te kijken of alle ballen stil liggen.
 //        if (vector2.x < -1.0e-3 || vector2.x > 1.0e-3 && vector2.y < -1.0e-3 || vector2.y> 1.0e-3) {
 
