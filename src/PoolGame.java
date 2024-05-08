@@ -110,8 +110,8 @@ public class PoolGame extends Application {
         world.setGravity(new Vector2(0, 0));
 
         createBalls();
-
         createWalls();
+        createCheckers();
     }
 
     private void draw(FXGraphics2D g) {
@@ -369,5 +369,49 @@ public class PoolGame extends Application {
         corner62.getTransform().setTranslation(37.1, 66.3);
         corner62.setMass(MassType.INFINITE);
         world.addBody(corner62);
+    }
+
+    private void createCheckers() {
+        // Checker1
+        Body checker1 = new Body();
+        checker1.addFixture(Geometry.createCircle(2.2));
+        checker1.getTransform().setTranslation(37.5, 23.0);
+        checker1.setMass(MassType.INFINITE);
+        world.addBody(checker1);
+
+        // Checker2
+        Body checker2 = new Body();
+        checker2.addFixture(Geometry.createCircle(2.2));
+        checker2.getTransform().setTranslation(80.0 , 20.2);
+        checker2.setMass(MassType.INFINITE);
+        world.addBody(checker2);
+
+        // Checker3
+        Body checker3 = new Body();
+        checker3.addFixture(Geometry.createCircle(2.2));
+        checker3.getTransform().setTranslation(122.8, 22.8);
+        checker3.setMass(MassType.INFINITE);
+        world.addBody(checker3);
+
+        // Checker4
+        Body checker4 = new Body();
+        checker4.addFixture(Geometry.createCircle(2.2));
+        checker4.getTransform().setTranslation(122.6, 66.9);
+        checker4.setMass(MassType.INFINITE);
+        world.addBody(checker4);
+
+        // Checker5
+        Body checker5 = new Body();
+        checker5.addFixture(Geometry.createCircle(2.2));
+        checker5.getTransform().setTranslation(80.0, 69.7);
+        checker5.setMass(MassType.INFINITE);
+        world.addBody(checker5);
+
+        // Checker6
+        Body checker6 = new Body();
+        checker6.addFixture(Geometry.createCircle(2.2));
+        checker6.getTransform().setTranslation(37.4, 66.9);
+        checker6.setMass(MassType.INFINITE);
+        world.addBody(checker6);
     }
 }
