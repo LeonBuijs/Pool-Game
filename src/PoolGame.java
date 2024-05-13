@@ -15,6 +15,7 @@ import org.dyn4j.dynamics.Force;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Transform;
 import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
@@ -45,6 +46,7 @@ public class PoolGame extends Application {
     private Camera camera;
     private MousePicker mousePicker;
     private boolean showCue = true;
+    private ArrayList<Body> checkingCorners = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -168,6 +170,37 @@ public class PoolGame extends Application {
             toShowCue = false;
         }
         this.showCue = toShowCue;
+        for (Ball ball : ballObjectList) {
+            if (!ball.isPotted()) {
+                if (ball.checkInPocket(checkingCorners)) {
+                    if (ball.getBallType() != Ball.BallType.WHITE) {
+                        ball.setPotted(true);
+                    } else {
+                        ball.setPotted(true);
+                    }
+                }
+            } else {
+                if (ball.getBallType() != Ball.BallType.WHITE){
+                    Transform transform = new Transform();
+                    transform.setTranslation(0,0);
+                    ball.getBall().setTransform(transform);
+                }
+                else {
+                    if (ball.getBall().getTransform().getTranslation().x != 59 || ball.getBall().getTransform().getTranslation().y != 45){
+                        Vector2 vector2 = ball.getBall().getChangeInPosition();
+                        ball.getBall().applyImpulse(new Vector2(-vector2.x*100, -vector2.y*100));
+
+                        System.out.println(ball.getBall().getTransform().getTranslation().x + ", " + ball.getBall().getTransform().getTranslation().y);
+                        Transform transform = new Transform();
+                        transform.setTranslation(59,45);
+                        ball.getBall().setTransform(transform);
+
+                    } else {
+                        ball.setPotted(false);
+                    }
+                }
+            }
+        }
     }
 
     private void createBalls() {
@@ -380,6 +413,7 @@ public class PoolGame extends Application {
         checker1.getTransform().setTranslation(37.5, 23.0);
         checker1.setMass(MassType.INFINITE);
         world.addBody(checker1);
+        checkingCorners.add(checker1);
 
         // Checker2
         Body checker2 = new Body();
@@ -387,6 +421,7 @@ public class PoolGame extends Application {
         checker2.getTransform().setTranslation(80.0 , 20.2);
         checker2.setMass(MassType.INFINITE);
         world.addBody(checker2);
+        checkingCorners.add(checker2);
 
         // Checker3
         Body checker3 = new Body();
@@ -394,6 +429,7 @@ public class PoolGame extends Application {
         checker3.getTransform().setTranslation(122.8, 22.8);
         checker3.setMass(MassType.INFINITE);
         world.addBody(checker3);
+        checkingCorners.add(checker3);
 
         // Checker4
         Body checker4 = new Body();
@@ -401,6 +437,7 @@ public class PoolGame extends Application {
         checker4.getTransform().setTranslation(122.6, 66.9);
         checker4.setMass(MassType.INFINITE);
         world.addBody(checker4);
+        checkingCorners.add(checker4);
 
         // Checker5
         Body checker5 = new Body();
@@ -408,6 +445,7 @@ public class PoolGame extends Application {
         checker5.getTransform().setTranslation(80.0, 69.7);
         checker5.setMass(MassType.INFINITE);
         world.addBody(checker5);
+        checkingCorners.add(checker5);
 
         // Checker6
         Body checker6 = new Body();
@@ -415,5 +453,6 @@ public class PoolGame extends Application {
         checker6.getTransform().setTranslation(37.4, 66.9);
         checker6.setMass(MassType.INFINITE);
         world.addBody(checker6);
+        checkingCorners.add(checker6);
     }
 }
