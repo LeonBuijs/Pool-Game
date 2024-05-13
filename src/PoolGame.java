@@ -45,6 +45,7 @@ public class PoolGame extends Application {
     private Camera camera;
     private MousePicker mousePicker;
     private boolean showCue = true;
+    private ArrayList<Body> checkingCorners = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -167,6 +168,20 @@ public class PoolGame extends Application {
             temp = false;
         }
         this.showCue = temp;
+        for (Ball ball : ballObjectList) {
+            if (!ball.isPotted()) {
+                if (ball.checkInPocket(checkingCorners)) {
+                    if (ball.getBallType() != Ball.BallType.WHITE) {
+                        System.out.println("ball potted");
+                        System.out.println(ball.getBallType());
+                        ball.setPotted(true);
+                        ball.getBall().translate(new Vector2(-50, -10));
+                    } else {
+                        //TODO: white ball
+                    }
+                }
+            }
+        }
     }
 
     private void createBalls() {
@@ -378,6 +393,7 @@ public class PoolGame extends Application {
         checker1.getTransform().setTranslation(37.5, 23.0);
         checker1.setMass(MassType.INFINITE);
         world.addBody(checker1);
+        checkingCorners.add(checker1);
 
         // Checker2
         Body checker2 = new Body();
@@ -385,6 +401,7 @@ public class PoolGame extends Application {
         checker2.getTransform().setTranslation(80.0 , 20.2);
         checker2.setMass(MassType.INFINITE);
         world.addBody(checker2);
+        checkingCorners.add(checker2);
 
         // Checker3
         Body checker3 = new Body();
@@ -392,6 +409,7 @@ public class PoolGame extends Application {
         checker3.getTransform().setTranslation(122.8, 22.8);
         checker3.setMass(MassType.INFINITE);
         world.addBody(checker3);
+        checkingCorners.add(checker3);
 
         // Checker4
         Body checker4 = new Body();
@@ -399,6 +417,7 @@ public class PoolGame extends Application {
         checker4.getTransform().setTranslation(122.6, 66.9);
         checker4.setMass(MassType.INFINITE);
         world.addBody(checker4);
+        checkingCorners.add(checker4);
 
         // Checker5
         Body checker5 = new Body();
@@ -406,6 +425,7 @@ public class PoolGame extends Application {
         checker5.getTransform().setTranslation(80.0, 69.7);
         checker5.setMass(MassType.INFINITE);
         world.addBody(checker5);
+        checkingCorners.add(checker5);
 
         // Checker6
         Body checker6 = new Body();
@@ -413,5 +433,6 @@ public class PoolGame extends Application {
         checker6.getTransform().setTranslation(37.4, 66.9);
         checker6.setMass(MassType.INFINITE);
         world.addBody(checker6);
+        checkingCorners.add(checker6);
     }
 }

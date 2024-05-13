@@ -4,12 +4,14 @@ import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Ball {
     private BallType ballType;
     private Body ball;
     private GameObject ballObject;
     private boolean running = false;
+    private boolean potted = false;
 
     public Ball(BallType ballType, Body ball, GameObject ballObject) {
         this.ballType = ballType;
@@ -42,6 +44,15 @@ public class Ball {
         return true;
     }
 
+    public boolean checkInPocket(ArrayList<Body> corners){
+        for (Body corner : corners) {
+            if (ball.isInContact(corner)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public BallType getBallType() {
         return ballType;
     }
@@ -55,4 +66,12 @@ public class Ball {
     }
 
     public enum BallType {HALF, WHOLE, BLACK, WHITE}
+
+    public boolean isPotted() {
+        return potted;
+    }
+
+    public void setPotted(boolean potted) {
+        this.potted = potted;
+    }
 }
