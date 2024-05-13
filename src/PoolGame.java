@@ -35,7 +35,7 @@ public class PoolGame extends Application {
     private boolean debugSelected = false;
     private BufferedImage image;
     private BufferedImage imageCue;
-    private List<Body> balls = new ArrayList<>();
+//    private List<Body> balls = new ArrayList<>();
     private List<Ball> ballObjectList = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
@@ -134,7 +134,7 @@ public class PoolGame extends Application {
 
 //        if (showCue) {
         AffineTransform cueTransform = new AffineTransform(txZoom);
-        cueTransform.translate(balls.get(0).getTransform().getTranslationX()/0.1, balls.get(0).getTransform().getTranslationY()/0.1);
+        cueTransform.translate(ballObjectList.get(0).getBall().getTransform().getTranslationX()/0.1, ballObjectList.get(0).getBall().getTransform().getTranslationY()/0.1);
         cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
         cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
@@ -244,34 +244,34 @@ public class PoolGame extends Application {
             ballObjectList.add(ball);
             world.addBody(ballBody);
             gameObjectList.add(ballObject);
-            balls.add(ballBody);
+//            balls.add(ballBody);
         }
         resetBalls();
     }
 
     private void resetBalls() {
-        balls.get(0).translate(new Vector2(59, 45));
+        ballObjectList.get(0).getBall().translate(new Vector2(59, 45));
 
         double baseX = 98;
         double baseY = 45;
         double offsetX = 1.72;
         double offsetY = 1;
 
-        balls.get(1).translate(new Vector2(baseX, baseY));
-        balls.get(2).translate(new Vector2(baseX + offsetX, baseY + offsetY));
-        balls.get(3).translate(new Vector2(baseX + offsetX, baseY - offsetY));
-        balls.get(4).translate(new Vector2(baseX + offsetX * 2, baseY + offsetY * 2));
-        balls.get(8).translate(new Vector2(baseX + offsetX * 2, baseY));
-        balls.get(5).translate(new Vector2(baseX + offsetX * 2, baseY - offsetY * 2));
-        balls.get(6).translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 3));
-        balls.get(7).translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 1));
-        balls.get(9).translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 1));
-        balls.get(10).translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 3));
-        balls.get(11).translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 4));
-        balls.get(12).translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 2));
-        balls.get(13).translate(new Vector2(baseX + offsetX * 4, baseY));
-        balls.get(14).translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 2));
-        balls.get(15).translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 4));
+        ballObjectList.get(1).getBall().translate(new Vector2(baseX, baseY));
+        ballObjectList.get(2).getBall().translate(new Vector2(baseX + offsetX, baseY + offsetY));
+        ballObjectList.get(3).getBall().translate(new Vector2(baseX + offsetX, baseY - offsetY));
+        ballObjectList.get(4).getBall().translate(new Vector2(baseX + offsetX * 2, baseY + offsetY * 2));
+        ballObjectList.get(8).getBall().translate(new Vector2(baseX + offsetX * 2, baseY));
+        ballObjectList.get(5).getBall().translate(new Vector2(baseX + offsetX * 2, baseY - offsetY * 2));
+        ballObjectList.get(6).getBall().translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 3));
+        ballObjectList.get(7).getBall().translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 1));
+        ballObjectList.get(9).getBall().translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 1));
+        ballObjectList.get(10).getBall().translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 3));
+        ballObjectList.get(11).getBall().translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 4));
+        ballObjectList.get(12).getBall().translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 2));
+        ballObjectList.get(13).getBall().translate(new Vector2(baseX + offsetX * 4, baseY));
+        ballObjectList.get(14).getBall().translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 2));
+        ballObjectList.get(15).getBall().translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 4));
     }
 
     private void shootBall() {
@@ -281,7 +281,7 @@ public class PoolGame extends Application {
         double x = (Math.cos(Math.toRadians(rotation))*power*10000);
         double y = (Math.sin(Math.toRadians(rotation))*power*10000);
 
-        balls.get(0).applyForce(new Force(x,y));
+        ballObjectList.get(0).getBall().applyForce(new Force(x,y));
     }
 
     private void createWalls() {

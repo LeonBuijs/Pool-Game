@@ -11,5 +11,5 @@ public class ServerData implements Serializable {
         }
         this.currentTurn = turn;
     }
-    public enum Turn {PLAYER_1, PLAYER_2}
+    public enum Turn {PLAYER_WHOLE, PLAYER_HALF}
 }
