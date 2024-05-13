@@ -175,7 +175,7 @@ public class PoolGame extends Application {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
                     } else {
-                        //TODO: white ball
+                        ball.setPotted(true);
                     }
                 }
             } else {
@@ -183,6 +183,20 @@ public class PoolGame extends Application {
                     Transform transform = new Transform();
                     transform.setTranslation(0,0);
                     ball.getBall().setTransform(transform);
+                }
+                else {
+                    if (ball.getBall().getTransform().getTranslation().x != 59 || ball.getBall().getTransform().getTranslation().y != 45){
+                        Vector2 vector2 = ball.getBall().getChangeInPosition();
+                        ball.getBall().applyImpulse(new Vector2(-vector2.x*100, -vector2.y*100));
+
+                        System.out.println(ball.getBall().getTransform().getTranslation().x + ", " + ball.getBall().getTransform().getTranslation().y);
+                        Transform transform = new Transform();
+                        transform.setTranslation(59,45);
+                        ball.getBall().setTransform(transform);
+
+                    } else {
+                        ball.setPotted(false);
+                    }
                 }
             }
         }
