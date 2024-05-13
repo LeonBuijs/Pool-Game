@@ -70,7 +70,11 @@ public class PoolGame extends Application {
         rotation.setSpacing(10);
 
         Button fireButton = new Button("Fire");
-        fireButton.setOnAction(event -> shootBall());
+        fireButton.setOnAction(event -> {
+            if (showCue) {
+                shootBall();
+            }
+        });
 
         javafx.scene.control.CheckBox showDebug = new CheckBox("Show debug");
         showDebug.setOnAction(e -> {
