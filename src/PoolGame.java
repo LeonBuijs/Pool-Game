@@ -15,6 +15,7 @@ import org.dyn4j.dynamics.Force;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Transform;
 import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
@@ -172,13 +173,16 @@ public class PoolGame extends Application {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
-                        System.out.println("ball potted");
-                        System.out.println(ball.getBallType());
                         ball.setPotted(true);
-                        ball.getBall().translate(new Vector2(-50, -10));
                     } else {
                         //TODO: white ball
                     }
+                }
+            } else {
+                if (ball.getBallType() != Ball.BallType.WHITE){
+                    Transform transform = new Transform();
+                    transform.setTranslation(0,0);
+                    ball.getBall().setTransform(transform);
                 }
             }
         }
