@@ -142,7 +142,7 @@ public class PoolGame extends Application {
 
         g.setColor(Color.white);
 
-        if (showCue) {
+        if (showCue & !ballWhite.isPotted()) {
             g.drawImage(imageCue, 75, -40, null);
             g.setStroke(new BasicStroke(10));
             g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
@@ -193,8 +193,7 @@ public class PoolGame extends Application {
                     if (ball.getBall().getTransform().getTranslation().x != 59 || ball.getBall().getTransform().getTranslation().y != 45){
                         Vector2 vector2 = ball.getBall().getChangeInPosition();
                         ball.getBall().applyImpulse(new Vector2(-vector2.x*100, -vector2.y*100));
-
-                        System.out.println(ball.getBall().getTransform().getTranslation().x + ", " + ball.getBall().getTransform().getTranslation().y);
+                        
                         Transform transform = new Transform();
                         transform.setTranslation(59,45);
                         ball.getBall().setTransform(transform);
