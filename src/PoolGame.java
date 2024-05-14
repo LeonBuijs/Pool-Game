@@ -134,7 +134,8 @@ public class PoolGame extends Application {
 
 //        if (showCue) {
         AffineTransform cueTransform = new AffineTransform(txZoom);
-        cueTransform.translate(ballObjectList.get(0).getBall().getTransform().getTranslationX()/0.1, ballObjectList.get(0).getBall().getTransform().getTranslationY()/0.1);
+        cueTransform.translate(ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationX()/0.1,
+                ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationY()/0.1);
         cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
         cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
@@ -164,6 +165,7 @@ public class PoolGame extends Application {
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 1);
 
         boolean toShowCue = true;
+
         for (Ball ball : ballObjectList) {
             ball.update();
             if (ball.checkRolling()){
@@ -174,7 +176,9 @@ public class PoolGame extends Application {
             toShowCue = false;
         }
         this.showCue = toShowCue;
-        for (Ball ball : ballObjectList) {
+
+        List<Ball> temp = new ArrayList<>(ballObjectList);
+        for (Ball ball : temp) {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
@@ -190,17 +194,8 @@ public class PoolGame extends Application {
                     ball.getBall().setTransform(transform);
                 }
                 else {
-                    if (ball.getBall().getTransform().getTranslation().x != 59 || ball.getBall().getTransform().getTranslation().y != 45){
-                        Vector2 vector2 = ball.getBall().getChangeInPosition();
-                        ball.getBall().applyImpulse(new Vector2(-vector2.x*100, -vector2.y*100));
-                        
-                        Transform transform = new Transform();
-                        transform.setTranslation(59,45);
-                        ball.getBall().setTransform(transform);
-
-                    } else {
-                        ball.setPotted(false);
-                    }
+                    resetWhiteBall();
+                    ball.setPotted(false);
                 }
             }
         }
@@ -249,8 +244,33 @@ public class PoolGame extends Application {
         resetBalls();
     }
 
+    private void resetWhiteBall() {
+        world.removeBody(ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall());
+        gameObjectList.remove(ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBallObject());
+        ballObjectList.remove(ballObjectList.get(ballObjectList.indexOf(ballWhite)));
+
+        Body ballBody = new Body();
+        BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
+        ballFix.setDensity(10);
+        ballFix.setRestitution(0.1);
+        ballBody.setAngularDamping(1);
+        ballBody.addFixture(ballFix);
+        ballBody.setGravityScale(0);
+        ballBody.setMass(MassType.NORMAL);
+
+        GameObject ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0143);
+        Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
+        ballWhite = ball;
+
+        ballObjectList.add(ball);
+        world.addBody(ballBody);
+        gameObjectList.add(ballObject);
+        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().translate(new Vector2(59, 45));
+        ballWhite.setPotted(false);
+    }
+
     private void resetBalls() {
-        ballObjectList.get(0).getBall().translate(new Vector2(59, 45));
+        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().translate(new Vector2(59, 45));
 
         double baseX = 98;
         double baseY = 45;
@@ -281,7 +301,7 @@ public class PoolGame extends Application {
         double x = (Math.cos(Math.toRadians(rotation))*power*10000);
         double y = (Math.sin(Math.toRadians(rotation))*power*10000);
 
-        ballObjectList.get(0).getBall().applyForce(new Force(x,y));
+        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x,y));
     }
 
     private void createWalls() {
