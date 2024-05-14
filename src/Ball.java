@@ -26,15 +26,18 @@ public class Ball {
             ball.applyImpulse(new Vector2(-vector2.x * 0.2, -vector2.y * 0.2));
         }
 
-//        test sout
-//        if (ballType.equals(BallType.WHITE)) {
-//            System.out.println(ball.getChangeInOrientation());
-//        }
+
     }
 
     public boolean checkRolling() {
         Vector2 vector2 = ball.getChangeInPosition();
-        if (vector2.x < 1.0e-3 && vector2.y < 1.0e-3) {
+
+        //test sout
+        if (ballType.equals(BallType.WHITE)) {
+            System.out.println(ball.getChangeInPosition());
+        }
+
+        if (vector2.x < 1.0e-3 && vector2.x > -1.0e-3 && vector2.y < 1.0e-3 && vector2.y > -1.0e-3) {
             return false;
         }
         return true;

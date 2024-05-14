@@ -149,6 +149,8 @@ public class PoolGame extends Application {
             g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
         }
 
+//        System.out.println(showCue + " : " + !ballWhite.isPotted());
+
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
 
         for (GameObject gameObject : gameObjectList) {
@@ -167,6 +169,10 @@ public class PoolGame extends Application {
         boolean toShowCue = true;
 
         for (Ball ball : ballObjectList) {
+            if (ball.isPotted() && !ball.equals(ballWhite)) {
+                continue;
+            }
+
             ball.update();
             if (ball.checkRolling()){
                 toShowCue = false;
