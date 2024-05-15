@@ -36,7 +36,7 @@ public class PoolGame extends Application {
     private BufferedImage image;
     private BufferedImage imageCue;
 //    private List<Body> balls = new ArrayList<>();
-    private List<Ball> ballObjectList = new ArrayList<>();//todo balls vervangen met deze en naam aanpassen
+    private List<Ball> ballObjectList = new ArrayList<>();
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
     private Ball ballWhite;
