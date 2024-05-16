@@ -220,7 +220,7 @@ public class PoolGame extends Application {
     private void createBalls() {
         for (int i = 0; i < 16; i++) {
             Body ballBody = new Body();
-            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
+            BodyFixture ballFix = new BodyFixture(Geometry.createCircle(0.8));
             ballFix.setDensity(10);
             ballFix.setRestitution(0.1);
             ballBody.setAngularDamping(1);
@@ -231,9 +231,9 @@ public class PoolGame extends Application {
             GameObject ballObject;
 
             if (i == 0) {
-                ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0143);
+                ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
             } else {
-                ballObject = new GameObject("balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0143);
+                ballObject = new GameObject("balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0115);
             }
 
             //toevoegen aan lijsten
