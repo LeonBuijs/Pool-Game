@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
@@ -63,27 +62,7 @@ public class PoolGame extends Application {
         mousePicker = new MousePicker(canvas);
 
         sliderPower.setShowTickLabels(true);
-        Label labelPower = new Label("Power: ");
-        HBox power = new HBox(labelPower, sliderPower);
-        power.setSpacing(10);
-
-        Label labelRotation = new Label("Rotation: ");
-        HBox rotation = new HBox(labelRotation, sliderRotation);
-        rotation.setSpacing(10);
-
-        Button fireButton = new Button("Fire");
-        fireButton.setOnAction(event -> {
-            if (showCue) {
-                shootBall();
-            }
-        });
-
-        javafx.scene.control.CheckBox showDebug = new CheckBox("Show debug");
-        showDebug.setOnAction(e -> {
-            debugSelected = showDebug.isSelected();
-        });
-        HBox hbox = new HBox(showDebug, power, rotation, fireButton);
-        hbox.setSpacing(100);
+        HBox hbox = getHBox();
         mainPane.setTop(hbox);
 
         new AnimationTimer() {
@@ -104,6 +83,31 @@ public class PoolGame extends Application {
         primaryStage.setTitle("Pool Game");
         primaryStage.show();
         draw(g2d);
+    }
+
+    private HBox getHBox() {
+        Label labelPower = new Label("Power: ");
+        HBox power = new HBox(labelPower, sliderPower);
+        power.setSpacing(10);
+
+        Label labelRotation = new Label("Rotation: ");
+        HBox rotation = new HBox(labelRotation, sliderRotation);
+        rotation.setSpacing(10);
+
+        Button fireButton = new Button("Fire");
+        fireButton.setOnAction(event -> {
+            if (showCue) {
+                shootBall();
+            }
+        });
+
+        CheckBox showDebug = new CheckBox("Show debug");
+        showDebug.setOnAction(e -> {
+            debugSelected = showDebug.isSelected();
+        });
+        HBox hbox = new HBox(showDebug, power, rotation, fireButton);
+        hbox.setSpacing(100);
+        return hbox;
     }
 
     public void init() {
@@ -154,10 +158,9 @@ public class PoolGame extends Application {
 //        System.out.println(showCue + " : " + !ballWhite.isPotted());
 
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
+        
+        gameObjectList.stream().distinct().forEach(gameObject -> gameObject.draw(g));
 
-        for (GameObject gameObject : gameObjectList) {
-            gameObject.draw(g);
-        }
         if (debugSelected) {
             g.setColor(Color.blue);
             DebugDraw.draw(g, world, 1);
@@ -186,7 +189,7 @@ public class PoolGame extends Application {
         this.showCue = toShowCue;
 
         List<Ball> temp = new ArrayList<>(ballObjectList);
-        for (Ball ball : temp) {
+        temp.stream().distinct().forEach(ball -> {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
@@ -214,7 +217,7 @@ public class PoolGame extends Application {
                     ball.setPotted(false);
                 }
             }
-        }
+        });
     }
 
     private void createBalls() {
@@ -319,8 +322,8 @@ public class PoolGame extends Application {
         int rotation = (int) sliderRotation.getValue() + 180;
         int power = (int) sliderPower.getValue();
 
-        double x = (Math.cos(Math.toRadians(rotation))*power*2000);
-        double y = (Math.sin(Math.toRadians(rotation))*power*2000);
+        double x = (Math.cos(Math.toRadians(rotation))*power*1000);
+        double y = (Math.sin(Math.toRadians(rotation))*power*1000);
 
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x,y));
     }
