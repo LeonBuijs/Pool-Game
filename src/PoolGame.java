@@ -268,7 +268,7 @@ public class PoolGame extends Application {
         Body ballBody = new Body();
         BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
         ballFix.setDensity(10);
-        ballFix.setRestitution(0.1);
+        ballFix.setRestitution(0.2);
         ballBody.setAngularDamping(1);
         ballBody.addFixture(ballFix);
         ballBody.setGravityScale(0);
@@ -290,8 +290,8 @@ public class PoolGame extends Application {
 
         double baseX = 98;
         double baseY = 45;
-        double offsetX = 1.72;
-        double offsetY = 1;
+        double offsetX = 1.43;
+        double offsetY = 0.85;
 
         ballObjectList.get(1).getBall().translate(new Vector2(baseX, baseY));
         ballObjectList.get(2).getBall().translate(new Vector2(baseX + offsetX, baseY + offsetY));
@@ -314,8 +314,8 @@ public class PoolGame extends Application {
         int rotation = (int) sliderRotation.getValue() + 180;
         int power = (int) sliderPower.getValue();
 
-        double x = (Math.cos(Math.toRadians(rotation))*power*10000);
-        double y = (Math.sin(Math.toRadians(rotation))*power*10000);
+        double x = (Math.cos(Math.toRadians(rotation))*power*2000);
+        double y = (Math.sin(Math.toRadians(rotation))*power*2000);
 
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x,y));
     }
