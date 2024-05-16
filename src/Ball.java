@@ -10,6 +10,7 @@ public class Ball {
     private GameObject ballObject;
     private boolean running = false;
     private boolean potted = false;
+    private int wichPocket = -1;
 
     public Ball(BallType ballType, Body ball, GameObject ballObject) {
         this.ballType = ballType;
@@ -33,9 +34,9 @@ public class Ball {
         Vector2 vector2 = ball.getChangeInPosition();
 
         //test sout
-        if (ballType.equals(BallType.WHITE)) {
-            System.out.println(ball.getChangeInPosition());
-        }
+//        if (ballType.equals(BallType.WHITE)) {
+//            System.out.println(ball.getChangeInPosition());
+//        }
 
         if (vector2.x < 1.0e-3 && vector2.x > -1.0e-3 && vector2.y < 1.0e-3 && vector2.y > -1.0e-3) {
             return false;
@@ -46,10 +47,15 @@ public class Ball {
     public boolean checkInPocket(ArrayList<Body> corners){
         for (Body corner : corners) {
             if (ball.isInContact(corner)){
+                this.wichPocket = corners.indexOf(corner) + 1;
                 return true;
             }
         }
         return false;
+    }
+
+    public int getWichPocket() {
+        return wichPocket;
     }
 
     public BallType getBallType() {

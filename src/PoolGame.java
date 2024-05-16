@@ -47,6 +47,8 @@ public class PoolGame extends Application {
     private MousePicker mousePicker;
     private boolean showCue = true;
     private ArrayList<Body> checkingCorners = new ArrayList<>();
+    private int lastPottedWhole = -1;
+    private int lastPottedHalf = -1;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -189,6 +191,14 @@ public class PoolGame extends Application {
                 if (ball.checkInPocket(checkingCorners)) {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
+                        if (ball.getBallType() == Ball.BallType.BLACK){
+                            //TODO
+                        } else if (ball.getBallType() == Ball.BallType.WHOLE){
+                            lastPottedWhole = ball.getWichPocket();
+                        } else if (ball.getBallType() == Ball.BallType.HALF){
+                            lastPottedHalf = ball.getWichPocket();
+                        }
+
                     } else {
                         ball.setPotted(true);
                     }
