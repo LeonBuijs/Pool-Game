@@ -286,6 +286,11 @@ public class PoolGame extends Application {
     }
 
     private void resetBalls() {
+        ballObjectList.stream().distinct().forEach(ball -> ball.setPotted(false));
+
+        lastPottedHalf = -1;
+        lastPottedWhole = -1;
+
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().translate(new Vector2(59, 45));
 
         double baseX = 98;
