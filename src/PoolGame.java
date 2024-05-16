@@ -35,7 +35,7 @@ public class PoolGame extends Application {
     private boolean debugSelected = false;
     private BufferedImage image;
     private BufferedImage imageCue;
-//    private List<Body> balls = new ArrayList<>();
+    //    private List<Body> balls = new ArrayList<>();
     private List<Ball> ballObjectList = new ArrayList<>();
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
@@ -129,7 +129,7 @@ public class PoolGame extends Application {
 
     private void draw(FXGraphics2D g) {
         g.setTransform(new AffineTransform());
-        g.clearRect(0,0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
         g.setBackground(Color.white);
 
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
@@ -139,22 +139,13 @@ public class PoolGame extends Application {
         g.setTransform(txZoom);
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
 
-//        if (showCue) {
         AffineTransform cueTransform = new AffineTransform(txZoom);
-        cueTransform.translate(ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationX()/0.1,
-                ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationY()/0.1);
+        cueTransform.translate(ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationX() / 0.1,
+                ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationY() / 0.1);
         cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
         cueTransform.scale(0.15, 0.15);
-//        cueTransform.scale(0.01, 0.01);
-
 
         g.setColor(Color.white);
-
-
-
-
-
-//        System.out.println(showCue + " : " + !ballWhite.isPotted());
 
         g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
 
@@ -165,7 +156,7 @@ public class PoolGame extends Application {
         if (showCue & !ballWhite.isPotted()) {
             g.drawImage(imageCue, 75, -40, null);
             g.setStroke(new BasicStroke(10));
-            g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
+            g.drawLine(0, 0, (int) (-sliderPower.getValue() / 0.03), 0);
         }
 
         if (debugSelected) {
@@ -186,11 +177,11 @@ public class PoolGame extends Application {
             }
 
             ball.update();
-            if (ball.checkRolling()){
+            if (ball.checkRolling()) {
                 toShowCue = false;
             }
         }
-        if (ballWhite.checkRolling()){
+        if (ballWhite.checkRolling()) {
             toShowCue = false;
         }
         this.showCue = toShowCue;
@@ -201,14 +192,12 @@ public class PoolGame extends Application {
                 if (ball.checkInPocket(checkingCorners)) {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
-                        if (ball.getBallType() == Ball.BallType.BLACK){
+                        if (ball.getBallType() == Ball.BallType.BLACK) {
                             //TODO: door lijst heen lopen checken of alles potted is,
                             // daarna kijken of ie in de juiste hole zit
-
-
-                        } else if (ball.getBallType() == Ball.BallType.WHOLE){
+                        } else if (ball.getBallType() == Ball.BallType.WHOLE) {
                             lastPottedWhole = ball.getWichPocket();
-                        } else if (ball.getBallType() == Ball.BallType.HALF){
+                        } else if (ball.getBallType() == Ball.BallType.HALF) {
                             lastPottedHalf = ball.getWichPocket();
                         }
 
@@ -217,12 +206,11 @@ public class PoolGame extends Application {
                     }
                 }
             } else {
-                if (ball.getBallType() != Ball.BallType.WHITE){
+                if (ball.getBallType() != Ball.BallType.WHITE) {
                     Transform transform = new Transform();
-                    transform.setTranslation(0,0);
+                    transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
-                }
-                else {
+                } else {
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
@@ -245,6 +233,7 @@ public class PoolGame extends Application {
 
             if (i == 0) {
                 ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
+                ballBody.setBullet(true);
             } else {
                 ballObject = new GameObject("balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0115);
             }
@@ -268,7 +257,6 @@ public class PoolGame extends Application {
             ballObjectList.add(ball);
             world.addBody(ballBody);
             gameObjectList.add(ballObject);
-//            balls.add(ballBody);
         }
         resetBalls();
     }
@@ -336,10 +324,10 @@ public class PoolGame extends Application {
         int rotation = (int) sliderRotation.getValue() + 180;
         int power = (int) sliderPower.getValue();
 
-        double x = (Math.cos(Math.toRadians(rotation))*power*1500);
-        double y = (Math.sin(Math.toRadians(rotation))*power*1500);
+        double x = (Math.cos(Math.toRadians(rotation)) * power * 2000);
+        double y = (Math.sin(Math.toRadians(rotation)) * power * 2000);
 
-        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x,y));
+        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x, y));
     }
 
     private void createWalls() {
@@ -384,84 +372,84 @@ public class PoolGame extends Application {
 
         // Corner1.1
         Body corner11 = new Body();
-        corner11.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(5,5), new Vector2(0,5)));
+        corner11.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(5, 5), new Vector2(0, 5)));
         corner11.getTransform().setTranslation(33, 22.5);
         corner11.setMass(MassType.INFINITE);
         world.addBody(corner11);
         // Corner1.2
         Body corner12 = new Body();
-        corner12.addFixture(Geometry.createTriangle(new Vector2(5,5), new Vector2(0,0), new Vector2(5,0)));
+        corner12.addFixture(Geometry.createTriangle(new Vector2(5, 5), new Vector2(0, 0), new Vector2(5, 0)));
         corner12.getTransform().setTranslation(37.1, 18.7);
         corner12.setMass(MassType.INFINITE);
         world.addBody(corner12);
         // Corner1.3
         Body corner13 = new Body();
-        corner13.addFixture(Geometry.createTriangle(new Vector2(5,5), new Vector2(0,0), new Vector2(5,0)));
+        corner13.addFixture(Geometry.createTriangle(new Vector2(5, 5), new Vector2(0, 0), new Vector2(5, 0)));
         corner13.getTransform().setTranslation(37.1, 18.7);
         corner13.setMass(MassType.INFINITE);
         world.addBody(corner13);
 
         // Corner2.1
         Body corner21 = new Body();
-        corner21.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(1,0), new Vector2(0,1.7)));
+        corner21.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1.7)));
         corner21.getTransform().setTranslation(76.9, 22);
         corner21.setMass(MassType.INFINITE);
         world.addBody(corner21);
         // Corner2.2
         Body corner22 = new Body();
-        corner22.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(1,0), new Vector2(1,1.7)));
+        corner22.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1.7)));
         corner22.getTransform().setTranslation(82.2, 22);
         corner22.setMass(MassType.INFINITE);
         world.addBody(corner22);
 
         // Corner3.1
         Body corner31 = new Body();
-        corner31.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(3,0), new Vector2(0,5)));
+        corner31.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(3, 0), new Vector2(0, 5)));
         corner31.getTransform().setTranslation(118.8, 18.7);
         corner31.setMass(MassType.INFINITE);
         world.addBody(corner31);
         // Corner3.2
         Body corner32 = new Body();
-        corner32.addFixture(Geometry.createTriangle(new Vector2(0,5), new Vector2(5,0), new Vector2(5,5)));
+        corner32.addFixture(Geometry.createTriangle(new Vector2(0, 5), new Vector2(5, 0), new Vector2(5, 5)));
         corner32.getTransform().setTranslation(122.0, 22.5);
         corner32.setMass(MassType.INFINITE);
         world.addBody(corner32);
 
         // Corner4.1
         Body corner41 = new Body();
-        corner41.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(5,0), new Vector2(5,5)));
+        corner41.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(5, 0), new Vector2(5, 5)));
         corner41.getTransform().setTranslation(122, 62.6);
         corner41.setMass(MassType.INFINITE);
         world.addBody(corner41);
         // Corner4.2
         Body corner42 = new Body();
-        corner42.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(3,5), new Vector2(0,5)));
+        corner42.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(3, 5), new Vector2(0, 5)));
         corner42.getTransform().setTranslation(118.8, 66.3);
         corner42.setMass(MassType.INFINITE);
         world.addBody(corner42);
 
         // Corner5.1
         Body corner51 = new Body();
-        corner51.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(1,1.7), new Vector2(0,1.7)));
+        corner51.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(1, 1.7), new Vector2(0, 1.7)));
         corner51.getTransform().setTranslation(76.9, 66.3);
         corner51.setMass(MassType.INFINITE);
         world.addBody(corner51);
         // Corner5.2
         Body corner52 = new Body();
-        corner52.addFixture(Geometry.createTriangle(new Vector2(0,1.7), new Vector2(1,0), new Vector2(1,1.7)));
+        corner52.addFixture(Geometry.createTriangle(new Vector2(0, 1.7), new Vector2(1, 0), new Vector2(1, 1.7)));
         corner52.getTransform().setTranslation(82.2, 66.3);
         corner52.setMass(MassType.INFINITE);
         world.addBody(corner52);
 
         // Corner6.1
         Body corner61 = new Body();
-        corner61.addFixture(Geometry.createTriangle(new Vector2(0,0), new Vector2(5,0), new Vector2(0,5)));
+        corner61.addFixture(Geometry.createTriangle(new Vector2(0, 0), new Vector2(5, 0), new Vector2(0, 5)));
         corner61.getTransform().setTranslation(33, 62.6);
         corner61.setMass(MassType.INFINITE);
         world.addBody(corner61);
         // Corner6.2
         Body corner62 = new Body();
-        corner62.addFixture(Geometry.createTriangle(new Vector2(0,5), new Vector2(5,0), new Vector2(5,5)));
+        corner62.addFixture(Geometry.createTriangle(new Vector2(0, 5), new Vector2(5, 0), new Vector2(5, 5)));
         corner62.getTransform().setTranslation(37.1, 66.3);
         corner62.setMass(MassType.INFINITE);
         world.addBody(corner62);
@@ -479,7 +467,7 @@ public class PoolGame extends Application {
         // Checker2
         Body checker2 = new Body();
         checker2.addFixture(Geometry.createCircle(2.2));
-        checker2.getTransform().setTranslation(80.0 , 20.2);
+        checker2.getTransform().setTranslation(80.0, 20.2);
         checker2.setMass(MassType.INFINITE);
         world.addBody(checker2);
         checkingCorners.add(checker2);
