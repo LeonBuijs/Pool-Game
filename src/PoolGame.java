@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PoolGame extends Application {
     private ResizableCanvas canvas;
@@ -294,7 +295,13 @@ public class PoolGame extends Application {
         lastPottedHalf = -1;
         lastPottedWhole = -1;
 
-        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().translate(new Vector2(59, 45));
+        //milde random afwijkijng van de witte bal om afstooten wat meer random te maken
+
+        Random random = new Random();
+
+        double deviationBall = random.nextDouble() - 0.5;
+
+        ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().translate(new Vector2(59, 45 + deviationBall));
 
         double baseX = 98;
         double baseY = 45;
@@ -322,8 +329,8 @@ public class PoolGame extends Application {
         int rotation = (int) sliderRotation.getValue() + 180;
         int power = (int) sliderPower.getValue();
 
-        double x = (Math.cos(Math.toRadians(rotation))*power*1000);
-        double y = (Math.sin(Math.toRadians(rotation))*power*1000);
+        double x = (Math.cos(Math.toRadians(rotation))*power*1500);
+        double y = (Math.sin(Math.toRadians(rotation))*power*1500);
 
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x,y));
     }
