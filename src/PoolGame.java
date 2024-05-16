@@ -146,21 +146,27 @@ public class PoolGame extends Application {
         cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));
         cueTransform.scale(0.15, 0.15);
 //        cueTransform.scale(0.01, 0.01);
-        g.setTransform(cueTransform);
+
 
         g.setColor(Color.white);
+
+
+
+
+
+//        System.out.println(showCue + " : " + !ballWhite.isPotted());
+
+        g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
+
+        gameObjectList.stream().distinct().forEach(gameObject -> gameObject.draw(g));
+
+        g.setTransform(cueTransform);
 
         if (showCue & !ballWhite.isPotted()) {
             g.drawImage(imageCue, 75, -40, null);
             g.setStroke(new BasicStroke(10));
             g.drawLine(0, 0, (int) (-sliderPower.getValue()/0.03),0);
         }
-
-//        System.out.println(showCue + " : " + !ballWhite.isPotted());
-
-        g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
-        
-        gameObjectList.stream().distinct().forEach(gameObject -> gameObject.draw(g));
 
         if (debugSelected) {
             g.setColor(Color.blue);
