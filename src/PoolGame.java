@@ -196,7 +196,10 @@ public class PoolGame extends Application {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
                         if (ball.getBallType() == Ball.BallType.BLACK){
-                            //TODO
+                            //TODO: door lijst heen lopen checken of alles potted is,
+                            // daarna kijken of ie in de juiste hole zit
+
+
                         } else if (ball.getBallType() == Ball.BallType.WHOLE){
                             lastPottedWhole = ball.getWichPocket();
                         } else if (ball.getBallType() == Ball.BallType.HALF){
@@ -295,10 +298,8 @@ public class PoolGame extends Application {
         lastPottedHalf = -1;
         lastPottedWhole = -1;
 
-        //milde random afwijkijng van de witte bal om afstooten wat meer random te maken
-
+        //milde random afwijking van de witte bal om afstoten wat meer random te maken
         Random random = new Random();
-
         double deviationBall = random.nextDouble() - 0.5;
 
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().translate(new Vector2(59, 45 + deviationBall));
