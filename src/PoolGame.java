@@ -273,15 +273,15 @@ public class PoolGame extends Application {
         ballObjectList.remove(ballObjectList.get(ballObjectList.indexOf(ballWhite)));
 
         Body ballBody = new Body();
-        BodyFixture ballFix = new BodyFixture(Geometry.createCircle(1));
+        BodyFixture ballFix = new BodyFixture(Geometry.createCircle(0.8));
         ballFix.setDensity(10);
-        ballFix.setRestitution(0.2);
+        ballFix.setRestitution(0.1);
         ballBody.setAngularDamping(1);
         ballBody.addFixture(ballFix);
         ballBody.setGravityScale(0);
         ballBody.setMass(MassType.NORMAL);
 
-        GameObject ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0143);
+        GameObject ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
         Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
         ballWhite = ball;
 
