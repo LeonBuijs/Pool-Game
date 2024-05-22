@@ -159,6 +159,8 @@ public class PoolGame extends Application {
             g.drawLine(0, 0, (int) (-sliderPower.getValue() / 0.03), 0);
         }
 
+        g.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
+
         if (debugSelected) {
             g.setColor(Color.blue);
             DebugDraw.draw(g, world, 1);
