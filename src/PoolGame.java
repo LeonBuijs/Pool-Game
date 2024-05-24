@@ -49,6 +49,10 @@ public class PoolGame extends Application {
     private ArrayList<Body> checkingCorners = new ArrayList<>();
     private int lastPottedWhole = -1;
     private int lastPottedHalf = -1;
+    private Player player1;
+    private Player player2;
+    private Player currentTurn = player1;
+    private Label currentTurnLabel = new Label();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -106,7 +110,8 @@ public class PoolGame extends Application {
         showDebug.setOnAction(e -> {
             debugSelected = showDebug.isSelected();
         });
-        HBox hbox = new HBox(showDebug, power, rotation, fireButton);
+
+        HBox hbox = new HBox(showDebug, power, rotation, fireButton, currentTurnLabel, new Label(player1.getNickName()), new Label("VS"), new Label(player2.getNickName()));
         hbox.setSpacing(100);
         return hbox;
     }
@@ -125,6 +130,14 @@ public class PoolGame extends Application {
         createBalls();
         createWalls();
         createCheckers();
+
+        //todo dit door server verbinding uiteindelijk afhandelen
+        player1 = new Player(1, "p1");
+        player2 = new Player(2, "p2");
+
+        currentTurn = player1;
+
+        currentTurnLabel.setText("Current turn: " + player1.getNickName());
     }
 
     private void draw(FXGraphics2D g) {
@@ -197,6 +210,8 @@ public class PoolGame extends Application {
                         if (ball.getBallType() == Ball.BallType.BLACK) {
                             //TODO: door lijst heen lopen checken of alles potted is,
                             // daarna kijken of ie in de juiste hole zit
+
+
                         } else if (ball.getBallType() == Ball.BallType.WHOLE) {
                             lastPottedWhole = ball.getWichPocket();
                         } else if (ball.getBallType() == Ball.BallType.HALF) {
@@ -213,11 +228,23 @@ public class PoolGame extends Application {
                     transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
                 } else {
+                    System.out.println(currentTurn);
+                    changeTurn();
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
             }
         });
+    }
+
+    private void changeTurn() {
+        if (currentTurn == player1) {
+            currentTurn = player2;
+            currentTurnLabel.setText("Current turn: " + player2.getNickName());
+        } else if (currentTurn == player2) {
+            currentTurn = player1;
+            currentTurnLabel.setText("Current turn: " + player1.getNickName());
+        }
     }
 
     private void createBalls() {
