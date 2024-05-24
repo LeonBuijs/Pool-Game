@@ -211,13 +211,9 @@ public class PoolGame extends Application {
                             //TODO: door lijst heen lopen checken of alles potted is,
                             // daarna kijken of ie in de juiste hole zit
 
-
-                        } else if (ball.getBallType() == Ball.BallType.WHOLE) {
-                            lastPottedWhole = ball.getWichPocket();
-                        } else if (ball.getBallType() == Ball.BallType.HALF) {
-                            lastPottedHalf = ball.getWichPocket();
                         }
 
+                        checkWholeAndHalfPocketed(ball);
                     } else {
                         ball.setPotted(true);
                     }
@@ -228,13 +224,26 @@ public class PoolGame extends Application {
                     transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
                 } else {
-                    System.out.println(currentTurn);
                     changeTurn();
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
             }
         });
+    }
+
+    private void checkWholeAndHalfPocketed(Ball ball) {
+        if (ball.getBallType() == Ball.BallType.WHOLE) {
+            checkPlayerHasBallType(ball);
+            lastPottedWhole = ball.getWichPocket();
+        } else if (ball.getBallType() == Ball.BallType.HALF) {
+            checkPlayerHasBallType(ball);
+            lastPottedHalf = ball.getWichPocket();
+        }
+    }
+
+    private void checkPlayerHasBallType(Ball ball) {
+        //todo
     }
 
     private void changeTurn() {
