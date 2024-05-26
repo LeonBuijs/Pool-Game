@@ -51,7 +51,7 @@ public class PoolGame extends Application {
     private int lastPottedHalf = -1;
     private Player player1;
     private Player player2;
-    private Player currentTurn = player1;
+    private Player currentPlayer = player1;
     private Label currentTurnLabel = new Label();
 
     @Override
@@ -135,7 +135,7 @@ public class PoolGame extends Application {
         player1 = new Player(1, "p1");
         player2 = new Player(2, "p2");
 
-        currentTurn = player1;
+        currentPlayer = player1;
 
         currentTurnLabel.setText("Current turn: " + player1.getNickName());
     }
@@ -201,8 +201,10 @@ public class PoolGame extends Application {
         }
         this.showCue = toShowCue;
 
+        boolean isTurnChanged = false;
+
         List<Ball> temp = new ArrayList<>(ballObjectList);
-        temp.stream().distinct().forEach(ball -> {
+        for (Ball ball : temp) {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
@@ -224,34 +226,52 @@ public class PoolGame extends Application {
                     transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
                 } else {
-                    changeTurn();
+                    changeTurn(isTurnChanged);
+                    isTurnChanged = true;
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
             }
-        });
-    }
-
-    private void checkWholeAndHalfPocketed(Ball ball) {
-        if (ball.getBallType() == Ball.BallType.WHOLE) {
-            checkPlayerHasBallType(ball);
-            lastPottedWhole = ball.getWichPocket();
-        } else if (ball.getBallType() == Ball.BallType.HALF) {
-            checkPlayerHasBallType(ball);
-            lastPottedHalf = ball.getWichPocket();
         }
     }
 
-    private void checkPlayerHasBallType(Ball ball) {
-        //todo
+    private void checkWholeAndHalfPocketed(Ball ball) {
+        boolean hasBallType = true;
+        if (ball.getBallType() == Ball.BallType.WHOLE) {
+            hasBallType = checkPlayerHasBallType(ball);
+            lastPottedWhole = ball.getWichPocket();
+        } else if (ball.getBallType() == Ball.BallType.HALF) {
+            hasBallType = checkPlayerHasBallType(ball);
+            lastPottedHalf = ball.getWichPocket();
+        }
+
+        if (!hasBallType) {
+            //todo
+        }
     }
 
-    private void changeTurn() {
-        if (currentTurn == player1) {
-            currentTurn = player2;
+    private boolean checkPlayerHasBallType(Ball ball) {
+        //todo
+        if (currentPlayer.getBallType() == null) {
+            currentPlayer.setBallType(ball.getBallType());
+            return true;
+        } else if (currentPlayer.getBallType().equals(ball.getBallType())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void changeTurn(boolean isTurnChanged) {
+        if (isTurnChanged) {
+            return;
+        }
+
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
             currentTurnLabel.setText("Current turn: " + player2.getNickName());
-        } else if (currentTurn == player2) {
-            currentTurn = player1;
+        } else if (currentPlayer == player2) {
+            currentPlayer = player1;
             currentTurnLabel.setText("Current turn: " + player1.getNickName());
         }
     }
