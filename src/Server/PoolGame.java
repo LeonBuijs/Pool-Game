@@ -56,8 +56,6 @@ public class PoolGame extends Application {
     private Player player1;
     private Player player2;
     private Player currentPlayer = player1;
-    private boolean isTurnChanged = false;
-    private boolean isTurnActive = false;
     private Turn turn = new Turn();
     private Label currentTurnLabel = new Label();
 
@@ -110,9 +108,8 @@ public class PoolGame extends Application {
         fireButton.setOnAction(event -> {
             if (showCue) {
                 shootBall();
-                isTurnActive = true;
                 turn = new Turn();
-                turn.isTurnActive = true;
+                turn.setTurnActive(true);
             }
         });
 
@@ -213,10 +210,6 @@ public class PoolGame extends Application {
         }
         this.showCue = toShowCue;
 
-        isTurnChanged = false;
-
-        boolean noBallPotted = true;
-
         List<Ball> temp = new ArrayList<>(ballObjectList);
         for (Ball ball : temp) {
             if (!ball.isPotted()) {
@@ -244,18 +237,15 @@ public class PoolGame extends Application {
                     turn.setNoBallPotted(false);
                     turn.setWhiteBallPotted(true);
                     turn.setToChangePlayer(true);
-//                    changeTurn();
+
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
             }
-            if (turn.isNoBallPotted() && !isRolling && turn.isTurnActive && turn.isTurnStarted()) {
-//                changeTurn();
-                isTurnActive = false;
+            if (turn.isNoBallPotted() && !isRolling && turn.isTurnActive() && turn.isTurnStarted()) {
                 turn.setToChangePlayer(true);
                 changeTurn();
-            } else if (!isRolling && turn.isTurnActive && turn.isTurnStarted()) {
-                isTurnActive = false;
+            } else if (!isRolling && turn.isTurnActive() && turn.isTurnStarted()) {
                 changeTurn();
             }
         }
@@ -274,7 +264,6 @@ public class PoolGame extends Application {
 
         if (!hasBallType) {
             //todo
-//            changeTurn();
             turn.setToChangePlayer(true);
         }
     }
@@ -297,30 +286,25 @@ public class PoolGame extends Application {
         }
     }
 
+    private void changeTurn() {
+
+        if (!turn.isTurnActive()) {
+            return;
+        }
+
+        if (turn.isToChangePlayer()) {
+            currentPlayer = getOtherPlayer();
+            currentTurnLabel.setText("Current turn: " + currentPlayer.getNickName() + " " + currentPlayer.getBallType());
+        }
+        turn.setTurnActive(false);
+    }
+
     private Player getOtherPlayer() {
         if (currentPlayer.equals(player1)) {
             return player2;
         } else {
             return player1;
         }
-    }
-
-    private void changeTurn() {
-
-        if (!turn.isTurnActive) {
-            return;
-        }
-
-        if (turn.toChangePlayer) {
-            if (currentPlayer == player1) {
-                currentPlayer = player2;
-                currentTurnLabel.setText("Current turn: " + player2.getNickName());
-            } else if (currentPlayer == player2) {
-                currentPlayer = player1;
-                currentTurnLabel.setText("Current turn: " + player1.getNickName());
-            }
-        }
-        turn.setTurnActive(false);
     }
 
     private void createBalls() {

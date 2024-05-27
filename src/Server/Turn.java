@@ -1,10 +1,10 @@
 package Server;
 
 public class Turn {
-    boolean isTurnActive = false;
-    boolean noBallPotted = true;
-    boolean whiteBallPotted = false;
-    boolean toChangePlayer = false;
+    private boolean isTurnActive = false;
+    private boolean noBallPotted = true;
+    private boolean whiteBallPotted = false;
+    private boolean toChangePlayer = false;
     private boolean turnStarted = false;
 
     public boolean isTurnActive() {
