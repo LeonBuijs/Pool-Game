@@ -220,7 +220,7 @@ public class PoolGame extends Application {
                         if (ball.getBallType() == Ball.BallType.BLACK) {
                             //TODO: door lijst heen lopen checken of alles potted is,
                             // daarna kijken of ie in de juiste hole zit
-
+                            resetGame();
                         }
 
                         checkWholeAndHalfPocketed(ball);
@@ -263,7 +263,6 @@ public class PoolGame extends Application {
         }
 
         if (!hasBallType) {
-            //todo
             turn.setToChangePlayer(true);
         }
     }
@@ -417,6 +416,29 @@ public class PoolGame extends Application {
         double y = (Math.sin(Math.toRadians(rotation)) * power * 2000);
 
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x, y));
+    }
+
+    private void resetGame() {
+        world.removeAllBodies();
+        createWalls();
+        createCheckers();
+
+        ballObjectList.clear();
+        gameObjectList.clear();
+        ballsHalf.clear();
+        ballsWhole.clear();
+
+        createBalls();
+
+        player1.setBallType(null);
+        player2.setBallType(null);
+
+        lastPottedHalf = -1;
+        lastPottedWhole = -1;
+
+        turn = new Turn();
+
+        currentPlayer = player1;
     }
 
     private void createWalls() {

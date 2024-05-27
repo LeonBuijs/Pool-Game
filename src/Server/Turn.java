@@ -1,6 +1,7 @@
 package Server;
 
 public class Turn {
+    //todo soms een glitch dat de turn meteen veranderd
     private boolean isTurnActive = false;
     private boolean noBallPotted = true;
     private boolean whiteBallPotted = false;
