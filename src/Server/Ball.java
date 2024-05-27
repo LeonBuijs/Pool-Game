@@ -1,6 +1,5 @@
 package Server;
 
-import Server.GameObject;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
@@ -12,7 +11,7 @@ public class Ball {
     private GameObject ballObject;
     private boolean running = false;
     private boolean potted = false;
-    private int wichPocket = -1;
+    private int whichPocket = -1;
 
     public Ball(BallType ballType, Body ball, GameObject ballObject) {
         this.ballType = ballType;
@@ -49,15 +48,15 @@ public class Ball {
     public boolean checkInPocket(ArrayList<Body> corners){
         for (Body corner : corners) {
             if (ball.isInContact(corner)){
-                this.wichPocket = corners.indexOf(corner) + 1;
+                this.whichPocket = corners.indexOf(corner) + 1;
                 return true;
             }
         }
         return false;
     }
 
-    public int getWichPocket() {
-        return wichPocket;
+    public int getWhichPocket() {
+        return whichPocket;
     }
 
     public BallType getBallType() {

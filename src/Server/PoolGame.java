@@ -220,7 +220,26 @@ public class PoolGame extends Application {
                         if (ball.getBallType() == Ball.BallType.BLACK) {
                             //TODO: door lijst heen lopen checken of alles potted is,
                             // daarna kijken of ie in de juiste hole zit
-                            resetGame();
+                            //todo bug waarbij soms een ball niet potted is maar dat wel hoort te zijn, hierdoor krijg je een false game over/reset
+
+                            boolean allPotted = true;
+
+                            for (Ball anBall : ballObjectList) {
+                                if (!anBall.isPotted() && anBall.getBallType().equals(currentPlayer.getBallType())) {
+                                    System.out.println(anBall.isPotted() + " : " + anBall.getBallType() + " : " + currentPlayer.getBallType());
+                                    System.out.println(ballObjectList.indexOf(anBall));
+                                    allPotted = false;
+                                    break;
+                                }
+                            }
+                            if (!allPotted || currentPlayer.getBallType() == null) {
+                                resetGame();
+                            } else if (checkInCorrectPocket()) {
+                                //todo iets doen dat je gewonnen hebt fzo
+                                System.out.println("yippeeee");
+                            } else {
+                                resetGame();
+                            }
                         }
 
                         checkWholeAndHalfPocketed(ball);
@@ -256,10 +275,10 @@ public class PoolGame extends Application {
         boolean hasBallType = true;
         if (ball.getBallType() == Ball.BallType.WHOLE) {
             hasBallType = checkPlayerHasBallType(ball);
-            lastPottedWhole = ball.getWichPocket();
+            lastPottedWhole = ball.getWhichPocket();
         } else if (ball.getBallType() == Ball.BallType.HALF) {
             hasBallType = checkPlayerHasBallType(ball);
-            lastPottedHalf = ball.getWichPocket();
+            lastPottedHalf = ball.getWhichPocket();
         }
 
         if (!hasBallType) {
@@ -418,16 +437,58 @@ public class PoolGame extends Application {
         ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().applyForce(new Force(x, y));
     }
 
+    private boolean checkInCorrectPocket() {
+        int lastPocketed;
+
+        if (currentPlayer.getBallType().equals(Ball.BallType.WHOLE)) {
+            lastPocketed = lastPottedWhole;
+        } else if (currentPlayer.getBallType().equals(Ball.BallType.HALF)) {
+            lastPocketed = lastPottedHalf;
+        } else {
+            return false;
+        }
+        System.out.println(ballBlack.getWhichPocket());
+        switch (lastPocketed) {
+            case 1:
+                if (ballBlack.getWhichPocket() == 4) {
+                    return true;
+                }
+            case 2:
+                if (ballBlack.getWhichPocket() == 5) {
+                    return true;
+                }
+            case 3:
+                if (ballBlack.getWhichPocket() == 6) {
+                    return true;
+                }
+            case 4:
+                if (ballBlack.getWhichPocket() == 1) {
+                    return true;
+                }
+            case 5:
+                if (ballBlack.getWhichPocket() == 2) {
+                    return true;
+                }
+            case 6:
+                if (ballBlack.getWhichPocket() == 3) {
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
     private void resetGame() {
         world.removeAllBodies();
-        createWalls();
-        createCheckers();
 
         ballObjectList.clear();
         gameObjectList.clear();
         ballsHalf.clear();
         ballsWhole.clear();
+        checkingCorners.clear();
 
+        createWalls();
+        createCheckers();
         createBalls();
 
         player1.setBallType(null);
@@ -439,6 +500,8 @@ public class PoolGame extends Application {
         turn = new Turn();
 
         currentPlayer = player1;
+
+        currentTurnLabel.setText("Current turn: " + player1.getNickName());
     }
 
     private void createWalls() {
