@@ -58,6 +58,7 @@ public class PoolGame extends Application {
     private Player currentPlayer = player1;
     private boolean isTurnChanged = false;
     private boolean isTurnActive = false;
+    private Turn turn = new Turn();
     private Label currentTurnLabel = new Label();
 
     @Override
@@ -110,13 +111,13 @@ public class PoolGame extends Application {
             if (showCue) {
                 shootBall();
                 isTurnActive = true;
+                turn = new Turn();
+                turn.isTurnActive = true;
             }
         });
 
         CheckBox showDebug = new CheckBox("Show debug");
-        showDebug.setOnAction(e -> {
-            debugSelected = showDebug.isSelected();
-        });
+        showDebug.setOnAction(e -> debugSelected = showDebug.isSelected());
 
         HBox hbox = new HBox(showDebug, power, rotation, fireButton, currentTurnLabel, new Label(player1.getNickName()), new Label("VS"), new Label(player2.getNickName()));
         hbox.setSpacing(100);
@@ -216,15 +217,11 @@ public class PoolGame extends Application {
 
         boolean noBallPotted = true;
 
-//        if (isRolling) {
-//            noBallPotted = true;
-//        }
-
         List<Ball> temp = new ArrayList<>(ballObjectList);
         for (Ball ball : temp) {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
-                    noBallPotted = false;
+                    turn.setNoBallPotted(false);
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
                         if (ball.getBallType() == Ball.BallType.BLACK) {
@@ -244,19 +241,25 @@ public class PoolGame extends Application {
                     transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
                 } else {
-                    noBallPotted = false;
-                    changeTurn();
+                    turn.setNoBallPotted(false);
+                    turn.setWhiteBallPotted(true);
+                    turn.setToChangePlayer(true);
+//                    changeTurn();
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
             }
-            if (noBallPotted && !isRolling && isTurnActive) {
+            if (turn.isNoBallPotted() && !isRolling && turn.isTurnActive && turn.isTurnStarted()) {
+//                changeTurn();
+                isTurnActive = false;
+                turn.setToChangePlayer(true);
                 changeTurn();
+            } else if (!isRolling && turn.isTurnActive && turn.isTurnStarted()) {
                 isTurnActive = false;
-            } else if (!isRolling) {
-                isTurnActive = false;
+                changeTurn();
             }
         }
+        turn.setTurnStarted(true);
     }
 
     private void checkWholeAndHalfPocketed(Ball ball) {
@@ -271,7 +274,8 @@ public class PoolGame extends Application {
 
         if (!hasBallType) {
             //todo
-            changeTurn();
+//            changeTurn();
+            turn.setToChangePlayer(true);
         }
     }
 
@@ -302,18 +306,21 @@ public class PoolGame extends Application {
     }
 
     private void changeTurn() {
-        if (isTurnChanged) {
+
+        if (!turn.isTurnActive) {
             return;
         }
 
-        if (currentPlayer == player1) {
-            currentPlayer = player2;
-            currentTurnLabel.setText("Current turn: " + player2.getNickName());
-        } else if (currentPlayer == player2) {
-            currentPlayer = player1;
-            currentTurnLabel.setText("Current turn: " + player1.getNickName());
+        if (turn.toChangePlayer) {
+            if (currentPlayer == player1) {
+                currentPlayer = player2;
+                currentTurnLabel.setText("Current turn: " + player2.getNickName());
+            } else if (currentPlayer == player2) {
+                currentPlayer = player1;
+                currentTurnLabel.setText("Current turn: " + player1.getNickName());
+            }
         }
-        isTurnChanged = true;
+        turn.setTurnActive(false);
     }
 
     private void createBalls() {
@@ -373,7 +380,7 @@ public class PoolGame extends Application {
         ballBody.setGravityScale(0);
         ballBody.setMass(MassType.NORMAL);
 
-        GameObject ballObject = new GameObject("res/balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
+        GameObject ballObject = new GameObject("res/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
         Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
         ballWhite = ball;
 
