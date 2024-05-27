@@ -218,10 +218,6 @@ public class PoolGame extends Application {
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
                         if (ball.getBallType() == Ball.BallType.BLACK) {
-                            //TODO: door lijst heen lopen checken of alles potted is,
-                            // daarna kijken of ie in de juiste hole zit
-                            //todo bug waarbij soms een ball niet potted is maar dat wel hoort te zijn, hierdoor krijg je een false game over/reset
-
                             boolean allPotted = true;
 
                             for (Ball anBall : ballObjectList) {
