@@ -1,3 +1,4 @@
+import Server.Ball;
 import org.dyn4j.geometry.Transform;
 import java.io.Serializable;
 import java.util.ArrayList;

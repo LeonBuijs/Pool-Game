@@ -25,9 +25,9 @@ public class PoolClient extends Application {
     private Ball ballWhite;
 
     public void init() throws IOException {
-//        this.ballWhite = new Ball();
+//        this.ballWhite = new Server.Ball();
         for (int i = 0; i < 15; i++) {
-//            Ball ball = new Ball();
+//            Server.Ball ball = new Server.Ball();
 //            balls.add(ball);
         }
 //        ballWhite.setImage(ImageIO.read(getClass().getResource("balls/ball_white.png")));
@@ -90,7 +90,7 @@ public class PoolClient extends Application {
     private void draw(FXGraphics2D g) {
         g.drawImage(image, (this.width-image.getWidth())/2,(this.height-image.getHeight())/2, null);
 //        ballWhite.draw(g);
-//        for (Ball ball : balls) {
+//        for (Server.Ball ball : balls) {
 //            ball.draw(g);
 //        }
     }

@@ -1,7 +1,9 @@
+package Client;
+
+import Server.GameObject;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Ball {

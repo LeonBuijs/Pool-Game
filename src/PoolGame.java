@@ -1,3 +1,5 @@
+import Server.Ball;
+import Server.GameObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
