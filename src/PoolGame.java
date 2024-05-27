@@ -52,6 +52,8 @@ public class PoolGame extends Application {
     private Player player1;
     private Player player2;
     private Player currentPlayer = player1;
+    private boolean isTurnChanged = false;
+    private boolean isTurnActive = false;
     private Label currentTurnLabel = new Label();
 
     @Override
@@ -103,6 +105,7 @@ public class PoolGame extends Application {
         fireButton.setOnAction(event -> {
             if (showCue) {
                 shootBall();
+                isTurnActive = true;
             }
         });
 
@@ -185,6 +188,7 @@ public class PoolGame extends Application {
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 1);
 
         boolean toShowCue = true;
+        boolean isRolling = false;
 
         for (Ball ball : ballObjectList) {
             if (ball.isPotted() && !ball.equals(ballWhite)) {
@@ -194,6 +198,9 @@ public class PoolGame extends Application {
             ball.update();
             if (ball.checkRolling()) {
                 toShowCue = false;
+                if (!isRolling) {
+                    isRolling = ball.checkRolling();
+                }
             }
         }
         if (ballWhite.checkRolling()) {
@@ -201,12 +208,19 @@ public class PoolGame extends Application {
         }
         this.showCue = toShowCue;
 
-        boolean isTurnChanged = false;
+        isTurnChanged = false;
+
+        boolean noBallPotted = true;
+
+//        if (isRolling) {
+//            noBallPotted = true;
+//        }
 
         List<Ball> temp = new ArrayList<>(ballObjectList);
         for (Ball ball : temp) {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
+                    noBallPotted = false;
                     if (ball.getBallType() != Ball.BallType.WHITE) {
                         ball.setPotted(true);
                         if (ball.getBallType() == Ball.BallType.BLACK) {
@@ -226,11 +240,17 @@ public class PoolGame extends Application {
                     transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
                 } else {
-                    changeTurn(isTurnChanged);
-                    isTurnChanged = true;
+                    noBallPotted = false;
+                    changeTurn();
                     resetWhiteBall();
                     ball.setPotted(false);
                 }
+            }
+            if (noBallPotted && !isRolling && isTurnActive) {
+                changeTurn();
+                isTurnActive = false;
+            } else if (!isRolling) {
+                isTurnActive = false;
             }
         }
     }
@@ -247,13 +267,20 @@ public class PoolGame extends Application {
 
         if (!hasBallType) {
             //todo
+            changeTurn();
         }
     }
 
     private boolean checkPlayerHasBallType(Ball ball) {
+        Player otherPlayer = getOtherPlayer();
         //todo
-        if (currentPlayer.getBallType() == null) {
+        if (currentPlayer.getBallType() == null && otherPlayer.getBallType() == null) {
             currentPlayer.setBallType(ball.getBallType());
+            if (ball.getBallType().equals(Ball.BallType.WHOLE)) {
+                otherPlayer.setBallType(Ball.BallType.HALF);
+            } else {
+                otherPlayer.setBallType(Ball.BallType.WHOLE);
+            }
             return true;
         } else if (currentPlayer.getBallType().equals(ball.getBallType())) {
             return true;
@@ -262,7 +289,15 @@ public class PoolGame extends Application {
         }
     }
 
-    private void changeTurn(boolean isTurnChanged) {
+    private Player getOtherPlayer() {
+        if (currentPlayer.equals(player1)) {
+            return player2;
+        } else {
+            return player1;
+        }
+    }
+
+    private void changeTurn() {
         if (isTurnChanged) {
             return;
         }
@@ -274,6 +309,7 @@ public class PoolGame extends Application {
             currentPlayer = player1;
             currentTurnLabel.setText("Current turn: " + player1.getNickName());
         }
+        isTurnChanged = true;
     }
 
     private void createBalls() {
