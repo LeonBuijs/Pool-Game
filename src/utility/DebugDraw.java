@@ -1,3 +1,5 @@
+package utility;
+
 import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;

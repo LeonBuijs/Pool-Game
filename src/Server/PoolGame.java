@@ -1,5 +1,7 @@
-import Server.Ball;
-import Server.GameObject;
+package Server;
+
+import utility.*;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -123,8 +125,8 @@ public class PoolGame extends Application {
 
     public void init() {
         try {
-            image = ImageIO.read(getClass().getResource("Pooltafel.png"));
-            imageCue = ImageIO.read(getClass().getResource("cue.png"));
+            image = ImageIO.read(getClass().getResource("res/Pooltafel.png"));
+            imageCue = ImageIO.read(getClass().getResource("res/cue.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -328,10 +330,10 @@ public class PoolGame extends Application {
             GameObject ballObject;
 
             if (i == 0) {
-                ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
+                ballObject = new GameObject("res/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
                 ballBody.setBullet(true);
             } else {
-                ballObject = new GameObject("balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0115);
+                ballObject = new GameObject("res/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0115);
             }
 
             //toevoegen aan lijsten
@@ -371,7 +373,7 @@ public class PoolGame extends Application {
         ballBody.setGravityScale(0);
         ballBody.setMass(MassType.NORMAL);
 
-        GameObject ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
+        GameObject ballObject = new GameObject("res/balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
         Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
         ballWhite = ball;
 

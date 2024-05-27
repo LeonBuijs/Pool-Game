@@ -94,10 +94,10 @@ public class PoolServer {
             GameObject ballObject;
 
             if (i == 0) {
-                ballObject = new GameObject("balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
+                ballObject = new GameObject("res.balls/balls/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
                 ballBody.setBullet(true);
             } else {
-                ballObject = new GameObject("balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0115);
+                ballObject = new GameObject("res.balls/balls/ball_" + i + ".png", ballBody, new Vector2(0, 0), 0.0115);
             }
 
             //toevoegen aan lijsten

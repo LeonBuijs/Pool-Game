@@ -1,3 +1,5 @@
+package Server;
+
 public class Player {
     private int playerNumber;
     private String nickName;
@@ -33,7 +35,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "Server.Player{" +
                 "playerNumber=" + playerNumber +
                 ", nickName='" + nickName + '\'' +
                 ", ballType=" + ballType +

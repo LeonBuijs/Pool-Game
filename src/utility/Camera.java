@@ -1,3 +1,5 @@
+package utility;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
