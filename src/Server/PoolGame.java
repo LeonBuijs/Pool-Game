@@ -222,8 +222,6 @@ public class PoolGame extends Application {
 
                             for (Ball anBall : ballObjectList) {
                                 if (!anBall.isPotted() && anBall.getBallType().equals(currentPlayer.getBallType())) {
-                                    System.out.println(anBall.isPotted() + " : " + anBall.getBallType() + " : " + currentPlayer.getBallType());
-                                    System.out.println(ballObjectList.indexOf(anBall));
                                     allPotted = false;
                                     break;
                                 }
@@ -443,7 +441,7 @@ public class PoolGame extends Application {
         } else {
             return false;
         }
-        System.out.println(ballBlack.getWhichPocket());
+
         switch (lastPocketed) {
             case 1:
                 if (ballBlack.getWhichPocket() == 4) {
