@@ -27,6 +27,9 @@ public class PoolClient extends Application {
     private BufferedImage poolTable;
     private List<TransformCarrier> transformList = new ArrayList<>();
     private List<BufferedImage> balls = new ArrayList<>();
+    private TransformCarrier cueTransform;
+    private boolean showCue = false;
+    private BufferedImage cueImage;
 //    private ArrayList<Ball> balls = new ArrayList<>();
 //    private Ball ballWhite;
 
@@ -42,6 +45,7 @@ public class PoolClient extends Application {
         }
 
         balls.add(ImageIO.read(getClass().getResource("res/ball_white.png")));
+        cueImage = ImageIO.read(getClass().getResource("res/cue.png"));
     }
 
     @Override
@@ -120,10 +124,19 @@ public class PoolClient extends Application {
             TransformCarrier transform = transformList.get(i);
 
             AffineTransform tx1 = new AffineTransform();
-//                tx.rotate(transform.getRotation()); fixme
+            tx.rotate(transform.getRotation());
             tx1.translate(transform.getX(), transform.getY());
             tx1.scale(0.0115, 0.0115);
             g.drawImage(balls.get(i), tx1, null);
+        }
+        if (showCue) {
+            AffineTransform cue = new AffineTransform();
+            cue.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115) / 2,
+                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) / 2 - 0.5);
+            cue.scale(0.1, 0.1);
+            cue.scale(0.15, 0.15);
+            cue.rotate(Math.toRadians(cueTransform.getRotation()));
+            g.drawImage(cueImage, cue, null);
         }
     }
 
@@ -135,6 +148,8 @@ public class PoolClient extends Application {
         if (!data.getTransforms().isEmpty()) {
             transformList = data.getTransforms();
         }
+
+        cueTransform = data.getCue();
     }
 
     private void send(Socket socket) throws IOException {

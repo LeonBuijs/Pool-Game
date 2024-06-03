@@ -11,6 +11,8 @@ import java.util.List;
 
 public class ServerData implements Serializable {
     List<TransformCarrier> transforms = new ArrayList<>();
+    TransformCarrier cue;
+    boolean showcue;
     int currentPlayer;
     int player1;
     int player2;
