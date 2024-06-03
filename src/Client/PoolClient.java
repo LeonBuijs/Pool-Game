@@ -1,61 +1,50 @@
 package Client;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.dyn4j.geometry.Transform;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
+import utility.ServerData;
+import utility.TransformCarrier;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
+import java.util.List;
 
 public class PoolClient extends Application {
     private int width = 1600;
     private int height = 900;
     private ResizableCanvas canvas;
-    private BufferedImage image;
-    private ArrayList<Ball> balls = new ArrayList<>();
-    private Ball ballWhite;
+    private BufferedImage poolTable;
+    private List<TransformCarrier> transformList = new ArrayList<>();
+    private List<BufferedImage> balls = new ArrayList<>();
+//    private ArrayList<Ball> balls = new ArrayList<>();
+//    private Ball ballWhite;
 
     public void init() throws IOException {
-//        this.ballWhite = new Server.Ball();
-        for (int i = 0; i < 15; i++) {
-//            Server.Ball ball = new Server.Ball();
-//            balls.add(ball);
+        for (int i = 1; i <= 15; i++) {
+            balls.add(ImageIO.read(getClass().getResource("res/ball_" + i + ".png")));
         }
-//        ballWhite.setImage(ImageIO.read(getClass().getResource("balls/ball_white.png")));
-//        balls.get(0).setImage(ImageIO.read(getClass().getResource("balls/ball_1.png")));
-//        balls.get(1).setImage(ImageIO.read(getClass().getResource("balls/ball_2.png")));
-//        balls.get(2).setImage(ImageIO.read(getClass().getResource("balls/ball_3.png")));
-//        balls.get(3).setImage(ImageIO.read(getClass().getResource("balls/ball_4.png")));
-//        balls.get(4).setImage(ImageIO.read(getClass().getResource("balls/ball_5.png")));
-//        balls.get(5).setImage(ImageIO.read(getClass().getResource("balls/ball_6.png")));
-//        balls.get(6).setImage(ImageIO.read(getClass().getResource("balls/ball_7.png")));
-//        balls.get(7).setImage(ImageIO.read(getClass().getResource("balls/ball_8.png")));
-//        balls.get(8).setImage(ImageIO.read(getClass().getResource("balls/ball_9.png")));
-//        balls.get(9).setImage(ImageIO.read(getClass().getResource("balls/ball_10.png")));
-//        balls.get(10).setImage(ImageIO.read(getClass().getResource("balls/ball_11.png")));
-//        balls.get(11).setImage(ImageIO.read(getClass().getResource("balls/ball_12.png")));
-//        balls.get(12).setImage(ImageIO.read(getClass().getResource("balls/ball_13.png")));
-//        balls.get(13).setImage(ImageIO.read(getClass().getResource("balls/ball_14.png")));
-//        balls.get(14).setImage(ImageIO.read(getClass().getResource("balls/ball_15.png")));
+
+        try {
+            poolTable = ImageIO.read(getClass().getResource("res/Pooltafel.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        balls.add(ImageIO.read(getClass().getResource("res/ball_white.png")));
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        try {
-//            image = ImageIO.read(getClass().getResource("Pooltafel.png"));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
         mainPane.setCenter(canvas);
@@ -64,78 +53,86 @@ public class PoolClient extends Application {
         Socket socket = new Socket("localhost", 2001);
 
         Thread threadSend = new Thread(() -> {
-            try {
-                send(socket);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            while (true) {
+                try {
+                    send(socket);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         threadSend.start();
 
         Thread threadReceive = new Thread(() -> {
-            try {
-                receive(socket);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            while (true) {
+                try {
+                    receive(socket);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
-
         threadReceive.start();
+
+        new AnimationTimer() {
+            long last = -1;
+
+            @Override
+            public void handle(long now) {
+                if (last == -1) {
+                    last = now;
+                }
+                update((now - last) / 1000000000.0);
+                last = now;
+                draw(g2d);
+            }
+        }.start();
+
         primaryStage.setScene(new Scene(mainPane, this.width, this.height));
         primaryStage.setTitle("Pool Game");
         primaryStage.show();
         draw(g2d);
     }
 
-    private void draw(FXGraphics2D g) {
-//        g.drawImage(image, (this.width-image.getWidth())/2,(this.height-image.getHeight())/2, null);
-//        ballWhite.draw(g);
-//        for (Server.Ball ball : balls) {
-//            ball.draw(g);
-//        }
+    private void update(double deltaTime) {
+
     }
 
-    private void receive(Socket socket) throws IOException {
+    private void draw(FXGraphics2D g) {
+        g.setTransform(new AffineTransform());
+
+        g.clearRect(0, 0, width, height);
+
+        AffineTransform tx = new AffineTransform();
+        tx.scale(7, 7);
+        g.setTransform(tx);
+
+        AffineTransform pooltable = new AffineTransform();
+        pooltable.scale(0.1, 0.1);
+        pooltable.translate(poolTable.getWidth()/2 - 150, poolTable.getHeight()/2 - 90);
+        g.drawImage(poolTable, pooltable, null);
+
+        for (int i = 0; i <= 15; i++) {
+            TransformCarrier transform = transformList.get(i);
+
+            AffineTransform tx1 = new AffineTransform();
+//                tx.rotate(transform.getRotation()); fixme
+            tx1.translate(transform.getX(), transform.getY());
+            tx1.scale(0.0115, 0.0115);
+            g.drawImage(balls.get(i), tx1, null);
+        }
+    }
+
+    private void receive(Socket socket) throws IOException, ClassNotFoundException {
         InputStream inputStream = socket.getInputStream();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-        String input = bufferedReader.readLine();
-        String type = input.substring(0, input.indexOf(" "));
-        String data = input.substring(input.indexOf(" ")+1);
-
-        switch (type){
-            case "ball1":
-                // Bal 1
-            case "ball2":
-                // Bal 2
-            case "ball3":
-                // Bal 3
-            case "ball4":
-                // Bal 4
-            case "ball5":
-                // Bal 5
-            case "ball6":
-                // Bal 6
-            case "ball7":
-                // Bal 7
-            case "ball8":
-                // Bal 8
-            case "ball9":
-                // Bal 9
-            case "ball10":
-                // Bal 10
-            case "ball11":
-                // Bal 11
-            case "ball12":
-                // Bal 12
-            case "ball13":
-                // Bal 13
-            case "ball14":
-                // Bal 14
-            case "ball15":
-                // Bal 15
-            case "ballw":
-                // Bal wit
+        ServerData data = (ServerData) objectInputStream.readObject();
+        if (!data.getTransforms().isEmpty()) {
+            transformList = data.getTransforms();
+            System.out.println("received");
         }
     }
 

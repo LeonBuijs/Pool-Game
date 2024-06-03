@@ -1,6 +1,8 @@
 package Server;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private int playerNumber;
     private String nickName;
     private Ball.BallType ballType;

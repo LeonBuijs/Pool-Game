@@ -28,6 +28,11 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -61,6 +66,49 @@ public class PoolGame extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Thread serverThread = new Thread(() -> {
+            System.out.println("Server");
+            ServerSocket serverSocket = null;
+            try {
+                serverSocket = new ServerSocket(2001);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            while (true) {
+                Socket socket = null;
+                try {
+                    socket = serverSocket.accept();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println("Er is een verbinding");
+
+                Socket finalSocket = socket;
+                Thread threadSend = new Thread(() -> {
+                    while (true) {
+                        try {
+                            send(finalSocket);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+                threadSend.start();
+
+                Socket finalSocket1 = socket;
+                Thread threadReceive = new Thread(() -> {
+                    while (true) {
+                        try {
+                            receive(finalSocket1);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+                threadReceive.start();
+            }
+        });
+        serverThread.start();
 
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
@@ -93,6 +141,20 @@ public class PoolGame extends Application {
         primaryStage.setTitle("Pool Game");
         primaryStage.show();
         draw(g2d);
+    }
+
+    private void receive(Socket socket) throws IOException {
+        InputStream inputStream = socket.getInputStream();
+    }
+
+    private void send(Socket socket) throws IOException {
+        if (ballObjectList.size() == 16) {
+            OutputStream outputStream = socket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+            objectOutputStream.writeObject(new ServerData(ballObjectList, currentPlayer.getPlayerNumber(), player1.getPlayerNumber(), player2.getPlayerNumber()));
+            System.out.println("sent");
+        }
     }
 
     private HBox getHBox() {
@@ -320,7 +382,7 @@ public class PoolGame extends Application {
     }
 
     private void createBalls() {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 1; i < 17; i++) {
             Body ballBody = new Body();
             BodyFixture ballFix = new BodyFixture(Geometry.createCircle(0.8));
             ballFix.setDensity(10);
@@ -332,7 +394,7 @@ public class PoolGame extends Application {
 
             GameObject ballObject;
 
-            if (i == 0) {
+            if (i == 16) {
                 ballObject = new GameObject("res/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
                 ballBody.setBullet(true);
             } else {
@@ -341,7 +403,7 @@ public class PoolGame extends Application {
 
             //toevoegen aan lijsten
             Ball ball;
-            if (i == 0) {
+            if (i == 16) {
                 ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i < 8) {
@@ -404,21 +466,21 @@ public class PoolGame extends Application {
         double offsetX = 1.43;
         double offsetY = 0.85;
 
-        ballObjectList.get(1).getBall().translate(new Vector2(baseX, baseY));
-        ballObjectList.get(2).getBall().translate(new Vector2(baseX + offsetX, baseY + offsetY));
-        ballObjectList.get(3).getBall().translate(new Vector2(baseX + offsetX, baseY - offsetY));
-        ballObjectList.get(4).getBall().translate(new Vector2(baseX + offsetX * 2, baseY + offsetY * 2));
-        ballObjectList.get(8).getBall().translate(new Vector2(baseX + offsetX * 2, baseY));
-        ballObjectList.get(5).getBall().translate(new Vector2(baseX + offsetX * 2, baseY - offsetY * 2));
-        ballObjectList.get(6).getBall().translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 3));
-        ballObjectList.get(7).getBall().translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 1));
-        ballObjectList.get(9).getBall().translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 1));
-        ballObjectList.get(10).getBall().translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 3));
-        ballObjectList.get(11).getBall().translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 4));
-        ballObjectList.get(12).getBall().translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 2));
-        ballObjectList.get(13).getBall().translate(new Vector2(baseX + offsetX * 4, baseY));
-        ballObjectList.get(14).getBall().translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 2));
-        ballObjectList.get(15).getBall().translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 4));
+        ballObjectList.get(0).getBall().translate(new Vector2(baseX, baseY));
+        ballObjectList.get(1).getBall().translate(new Vector2(baseX + offsetX, baseY + offsetY));
+        ballObjectList.get(2).getBall().translate(new Vector2(baseX + offsetX, baseY - offsetY));
+        ballObjectList.get(3).getBall().translate(new Vector2(baseX + offsetX * 2, baseY + offsetY * 2));
+        ballObjectList.get(7).getBall().translate(new Vector2(baseX + offsetX * 2, baseY));
+        ballObjectList.get(4).getBall().translate(new Vector2(baseX + offsetX * 2, baseY - offsetY * 2));
+        ballObjectList.get(5).getBall().translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 3));
+        ballObjectList.get(6).getBall().translate(new Vector2(baseX + offsetX * 3, baseY + offsetY * 1));
+        ballObjectList.get(8).getBall().translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 1));
+        ballObjectList.get(9).getBall().translate(new Vector2(baseX + offsetX * 3, baseY - offsetY * 3));
+        ballObjectList.get(10).getBall().translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 4));
+        ballObjectList.get(11).getBall().translate(new Vector2(baseX + offsetX * 4, baseY + offsetY * 2));
+        ballObjectList.get(12).getBall().translate(new Vector2(baseX + offsetX * 4, baseY));
+        ballObjectList.get(13).getBall().translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 2));
+        ballObjectList.get(14).getBall().translate(new Vector2(baseX + offsetX * 4, baseY - offsetY * 4));
     }
 
     private void shootBall() {
