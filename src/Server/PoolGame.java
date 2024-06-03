@@ -55,6 +55,7 @@ public class PoolGame extends Application {
     private Camera camera;
     private MousePicker mousePicker;
     private boolean showCue = true;
+    private AffineTransform cueTransform = new AffineTransform();
     private ArrayList<Body> checkingCorners = new ArrayList<>();
     private int lastPottedWhole = -1;
     private int lastPottedHalf = -1;
@@ -152,7 +153,7 @@ public class PoolGame extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, currentPlayer.getPlayerNumber(), player1.getPlayerNumber(), player2.getPlayerNumber()));
+            objectOutputStream.writeObject(new ServerData(ballObjectList, currentPlayer.getPlayerNumber(), player1.getPlayerNumber(), player2.getPlayerNumber(), cueTransform, sliderRotation.getValue(), showCue));
             System.out.println("sent");
         }
     }
@@ -219,7 +220,7 @@ public class PoolGame extends Application {
         g.setTransform(txZoom);
         g.drawImage(image, (1600 - image.getWidth()) / 2, (900 - image.getHeight()) / 2, null);
 
-        AffineTransform cueTransform = new AffineTransform(txZoom);
+        cueTransform = new AffineTransform(txZoom);
         cueTransform.translate(ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationX() / 0.1,
                 ballObjectList.get(ballObjectList.indexOf(ballWhite)).getBall().getTransform().getTranslationY() / 0.1);
         cueTransform.rotate(Math.toRadians(sliderRotation.getValue()));

@@ -2,6 +2,7 @@ package utility;
 
 import org.dyn4j.geometry.Transform;
 
+import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 
 public class TransformCarrier implements Serializable {
@@ -13,6 +14,12 @@ public class TransformCarrier implements Serializable {
         this.x = transform.getTranslationX();
         this.y = transform.getTranslationY();
         this.rotation = transform.getRotation();
+    }
+
+    public TransformCarrier(AffineTransform transform, double rotation) {
+        this.x = transform.getTranslateX();
+        this.y = transform.getTranslateY();
+        this.rotation = rotation;
     }
 
     public double getX() {

@@ -12,6 +12,7 @@ import utility.ServerData;
 import utility.TransformCarrier;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -102,6 +103,7 @@ public class PoolClient extends Application {
 
     private void draw(FXGraphics2D g) {
         g.setTransform(new AffineTransform());
+        g.setBackground(Color.white);
 
         g.clearRect(0, 0, width, height);
 
@@ -132,7 +134,6 @@ public class PoolClient extends Application {
         ServerData data = (ServerData) objectInputStream.readObject();
         if (!data.getTransforms().isEmpty()) {
             transformList = data.getTransforms();
-            System.out.println("received");
         }
     }
 
