@@ -1,18 +1,22 @@
 package utility;
 
 import Server.Ball;
+import Server.Player;
 import org.dyn4j.geometry.Transform;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ServerData implements Serializable {
     ArrayList<Transform> transforms = new ArrayList<>();
-    Turn currentTurn;
-    public ServerData(ArrayList<Ball> balls, Turn turn) {
+    Player currentPlayer;
+    Player player1;
+    Player player2;
+    public ServerData(ArrayList<Ball> balls, Player currentlyPlaying, Player player1, Player player2) {
         for (Ball ball : balls) {
             transforms.add(ball.getBall().getTransform());
         }
-        this.currentTurn = turn;
+        this.currentPlayer = currentlyPlaying;
+        this.player1 = player1;
+        this.player2 = player2;
     }
-    public enum Turn {PLAYER_WHOLE, PLAYER_HALF}
 }

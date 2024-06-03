@@ -50,11 +50,11 @@ public class PoolClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        try {
-            image = ImageIO.read(getClass().getResource("Pooltafel.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            image = ImageIO.read(getClass().getResource("Pooltafel.png"));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
@@ -88,7 +88,7 @@ public class PoolClient extends Application {
     }
 
     private void draw(FXGraphics2D g) {
-        g.drawImage(image, (this.width-image.getWidth())/2,(this.height-image.getHeight())/2, null);
+//        g.drawImage(image, (this.width-image.getWidth())/2,(this.height-image.getHeight())/2, null);
 //        ballWhite.draw(g);
 //        for (Server.Ball ball : balls) {
 //            ball.draw(g);
