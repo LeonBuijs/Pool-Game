@@ -38,6 +38,9 @@ public class PoolClient extends Application {
     private boolean running = true;
     private boolean isMyTurn = false;
     private boolean shoot = false;
+    private Label currentTurnLabel = new Label();
+    private Label playersLabel = new Label();
+    private ServerData data;
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -81,7 +84,7 @@ public class PoolClient extends Application {
             }
         });
 
-        HBox hBox = new HBox(power, rotation, fireButton);
+        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel);
         hBox.setSpacing(100);
 
         mainPane.setTop(hBox);
@@ -139,6 +142,8 @@ public class PoolClient extends Application {
     private void update(double deltaTime, Stage primaryStage) {
         //stopt de thread als het tabje gesloten wordt
         running = primaryStage.isShowing();
+        currentTurnLabel.setText("Current turn: " + data.getCurrentPlayer().getNickName() + " " + data.getCurrentPlayer().getBallType());
+        playersLabel.setText(data.getPlayer1Nickname() + " vs " + data.getPlayer2Nickname()); //TODO: deze methodes returnen null
     }
 
     private void draw(FXGraphics2D g) {
@@ -180,7 +185,7 @@ public class PoolClient extends Application {
         InputStream inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-        ServerData data = (ServerData) objectInputStream.readObject();
+        data = (ServerData) objectInputStream.readObject();
 //        System.out.println(data.getCurrentPlayer().getPlayerNumber());
 //        System.out.println(data.getClientPlayer().getPlayerNumber());
 
