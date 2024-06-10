@@ -63,6 +63,7 @@ public class PoolGame extends Application {
     private Player player2;
     private Player currentPlayer = player1;
     private Turn turn = new Turn();
+    private int playerCount = 0;
     private Label currentTurnLabel = new Label();
 
     @Override
