@@ -2,7 +2,6 @@ package utility;
 
 import Server.Ball;
 import Server.Player;
-import org.dyn4j.geometry.Transform;
 
 import java.awt.geom.AffineTransform;
 import java.io.Serializable;
@@ -12,21 +11,23 @@ import java.util.List;
 public class ServerData implements Serializable {
     List<TransformCarrier> transforms = new ArrayList<>();
     TransformCarrier cue;
-    boolean showcue;
+    boolean showCue;
+    Player clientPlayer;
     Player currentPlayer;
     Player player1;
     Player player2;
     String player1Nickname;
     String player2Nickname;
-    public ServerData(List<Ball> balls, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue) {
+    public ServerData(List<Ball> balls, Player clientPlayer, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue) {
         for (Ball ball : balls) {
             transforms.add(new TransformCarrier(ball.getBall().getTransform()));
         }
+        this.clientPlayer = clientPlayer;
         this.currentPlayer = currentlyPlaying;
         this.player1 = player1;
         this.player2 = player2;
         this.cue = new TransformCarrier(cue, cueRotation);
-        this.showcue = showCue;
+        this.showCue = showCue;
     }
 
     public List<TransformCarrier> getTransforms() {
@@ -45,12 +46,20 @@ public class ServerData implements Serializable {
         this.cue = cue;
     }
 
-    public boolean isShowcue() {
-        return showcue;
+    public boolean isShowCue() {
+        return showCue;
     }
 
-    public void setShowcue(boolean showcue) {
-        this.showcue = showcue;
+    public void setShowCue(boolean showCue) {
+        this.showCue = showCue;
+    }
+
+    public Player getClientPlayer() {
+        return clientPlayer;
+    }
+
+    public void setClientPlayer(Player clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 
     public Player getCurrentPlayer() {

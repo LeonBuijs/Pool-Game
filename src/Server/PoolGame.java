@@ -88,7 +88,7 @@ public class PoolGame extends Application {
                 Socket finalSocket = socket;
                 Thread threadSend = new Thread(() -> {
                     boolean running = true;
-                    Player player;
+                    Player player = null;
                     if (player1 == null) {
                         player = new Player(1, "p1");
                         player1 = player;
@@ -99,7 +99,7 @@ public class PoolGame extends Application {
                     }
                     while (running) {
                         try {
-                            send(finalSocket);
+                            send(finalSocket, player);
                         } catch (IOException e) {
                             System.out.println("client disconnected");
                             running = false;
@@ -162,12 +162,12 @@ public class PoolGame extends Application {
         InputStream inputStream = socket.getInputStream();
     }
 
-    private void send(Socket socket) throws IOException {
+    private void send(Socket socket, Player player) throws IOException {
         if (ballObjectList.size() == 16) {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue));
+            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue));
         }
     }
 
