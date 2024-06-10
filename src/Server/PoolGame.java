@@ -27,10 +27,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -144,8 +141,11 @@ public class PoolGame extends Application {
         draw(g2d);
     }
 
-    private void receive(Socket socket) throws IOException {
+    private void receive(Socket socket) throws IOException, ClassNotFoundException {
         InputStream inputStream = socket.getInputStream();
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+
+        ClientData data = (ClientData) objectInputStream.readObject();
     }
 
     private void send(Socket socket) throws IOException {
