@@ -1,6 +1,8 @@
 package utility;
 
-public class ClientData {
+import java.io.Serializable;
+
+public class ClientData implements Serializable {
     private String nickName;
     private double rotation;
     private double power;

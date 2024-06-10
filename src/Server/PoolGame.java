@@ -114,6 +114,8 @@ public class PoolGame extends Application {
                         } catch (IOException e) {
                             System.out.println("client disconnected");
                             running = false;
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 });
