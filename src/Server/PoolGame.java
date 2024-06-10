@@ -165,7 +165,7 @@ public class PoolGame extends Application {
         ClientData data = (ClientData) objectInputStream.readObject();
         sliderPower.setValue(data.getPower());
         sliderRotation.setValue(data.getRotation());
-        if (data.isFire()){
+        if (data.isFire() && showCue && player1 != null && player2 != null){
             shootBall();
             turn = new Turn();
             turn.setTurnActive(true);
