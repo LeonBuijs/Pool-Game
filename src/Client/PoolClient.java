@@ -35,8 +35,9 @@ public class PoolClient extends Application {
     private TransformCarrier cueTransform;
     private boolean showCue = false;
     private BufferedImage cueImage;
-    boolean running = true;
+    private boolean running = true;
     private boolean isMyTurn = false;
+    private boolean shoot = false;
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -74,6 +75,9 @@ public class PoolClient extends Application {
         rotation.setSpacing(10);
 
         Button fireButton = new Button("Fire");
+        fireButton.setOnAction(event -> {
+            this.shoot = true;
+        });
 
         HBox hBox = new HBox(power, rotation, fireButton);
         hBox.setSpacing(100);
@@ -198,7 +202,8 @@ public class PoolClient extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), false));
+            objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), this.shoot));
+            this.shoot = false;
         }
     }
 }
