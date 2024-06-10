@@ -165,6 +165,11 @@ public class PoolGame extends Application {
         ClientData data = (ClientData) objectInputStream.readObject();
         sliderPower.setValue(data.getPower());
         sliderRotation.setValue(data.getRotation());
+        if (data.isFire()){
+            shootBall();
+            turn = new Turn();
+            turn.setTurnActive(true);
+        }
     }
 
     private void send(Socket socket, Player player) throws IOException {
