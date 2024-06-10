@@ -92,6 +92,7 @@ public class PoolGame extends Application {
                     if (player1 == null) {
                         player = new Player(1, "p1");
                         player1 = player;
+                        currentPlayer = player1;
                     } else if (player2 == null) {
                         player = new Player(2, "p2");
                         player2 = player;
