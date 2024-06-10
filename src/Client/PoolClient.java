@@ -76,7 +76,9 @@ public class PoolClient extends Application {
 
         Button fireButton = new Button("Fire");
         fireButton.setOnAction(event -> {
-            this.shoot = true;
+            if (sliderPower.getValue() != 0) {
+                this.shoot = true;
+            }
         });
 
         HBox hBox = new HBox(power, rotation, fireButton);
@@ -203,7 +205,10 @@ public class PoolClient extends Application {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
             objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), this.shoot));
-            this.shoot = false;
+            if (shoot) {
+                sliderPower.setValue(0);
+            }
+            shoot = false;
         }
     }
 }
