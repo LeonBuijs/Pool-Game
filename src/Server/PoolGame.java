@@ -56,10 +56,11 @@ public class PoolGame extends Application {
     private ArrayList<Body> checkingCorners = new ArrayList<>();
     private int lastPottedWhole = -1;
     private int lastPottedHalf = -1;
-    private Player player1;
-    private Player player2;
+    private Player player1 = null;
+    private Player player2 = null;
     private Player currentPlayer = player1;
     private Turn turn = new Turn();
+    private int playerCount = 0;
     private Label currentTurnLabel = new Label();
 
     @Override
@@ -83,11 +84,22 @@ public class PoolGame extends Application {
 
                 Socket finalSocket = socket;
                 Thread threadSend = new Thread(() -> {
-                    while (true) {
+                    boolean running = true;
+                    Player player = null;
+                    if (player1 == null) {
+                        player = new Player(1, "p1");
+                        player1 = player;
+                        currentPlayer = player1;
+                    } else if (player2 == null) {
+                        player = new Player(2, "p2");
+                        player2 = player;
+                    }
+                    while (running) {
                         try {
-                            send(finalSocket);
+                            send(finalSocket, player);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("client disconnected");
+                            running = false;
                         }
                     }
                 });
@@ -95,13 +107,13 @@ public class PoolGame extends Application {
 
                 Socket finalSocket1 = socket;
                 Thread threadReceive = new Thread(() -> {
-                    while (true) {
+                    boolean running = true;
+                    while (running) {
                         try {
                             receive(finalSocket1);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("client disconnected");
+                            running = false;
                         }
                     }
                 });
@@ -150,13 +162,12 @@ public class PoolGame extends Application {
         ClientData data = (ClientData) objectInputStream.readObject();
     }
 
-    private void send(Socket socket) throws IOException {
+    private void send(Socket socket, Player player) throws IOException {
         if (ballObjectList.size() == 16) {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, currentPlayer.getPlayerNumber(), player1.getPlayerNumber(), player2.getPlayerNumber(), cueTransform, sliderRotation.getValue(), showCue));
-            System.out.println("sent");
+            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue));
         }
     }
 
@@ -171,7 +182,7 @@ public class PoolGame extends Application {
 
         Button fireButton = new Button("Fire");
         fireButton.setOnAction(event -> {
-            if (showCue) {
+            if (showCue && player1 != null && player2 != null) {
                 shootBall();
                 turn = new Turn();
                 turn.setTurnActive(true);
@@ -181,7 +192,7 @@ public class PoolGame extends Application {
         CheckBox showDebug = new CheckBox("Show debug");
         showDebug.setOnAction(e -> debugSelected = showDebug.isSelected());
 
-        HBox hbox = new HBox(showDebug, power, rotation, fireButton, currentTurnLabel, new Label(player1.getNickName()), new Label("VS"), new Label(player2.getNickName()));
+        HBox hbox = new HBox(showDebug, power, rotation, fireButton, currentTurnLabel, new Label(""), new Label("VS"), new Label(""));
         hbox.setSpacing(100);
         return hbox;
     }
@@ -202,12 +213,12 @@ public class PoolGame extends Application {
         createCheckers();
 
         //todo dit door server verbinding uiteindelijk afhandelen
-        player1 = new Player(1, "p1");
-        player2 = new Player(2, "p2");
+//        player1 = new Player(1, "p1");
+//        player2 = new Player(2, "p2");
 
         currentPlayer = player1;
 
-        currentTurnLabel.setText("Current turn: " + player1.getNickName());
+//        currentTurnLabel.setText("Current turn: " + player1.getNickName());
     }
 
     private void draw(FXGraphics2D g) {
