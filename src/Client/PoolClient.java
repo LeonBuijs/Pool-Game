@@ -30,6 +30,7 @@ public class PoolClient extends Application {
     private TransformCarrier cueTransform;
     private boolean showCue = false;
     private BufferedImage cueImage;
+    boolean running = true;
 //    private ArrayList<Ball> balls = new ArrayList<>();
 //    private Ball ballWhite;
 
@@ -58,7 +59,7 @@ public class PoolClient extends Application {
         Socket socket = new Socket("localhost", 2001);
 
         Thread threadSend = new Thread(() -> {
-            while (true) {
+            while (running) {
                 try {
                     send(socket);
                 } catch (IOException e) {
@@ -69,7 +70,7 @@ public class PoolClient extends Application {
         threadSend.start();
 
         Thread threadReceive = new Thread(() -> {
-            while (true) {
+            while (running) {
                 try {
                     receive(socket);
                 } catch (IOException e) {
@@ -81,6 +82,11 @@ public class PoolClient extends Application {
         });
         threadReceive.start();
 
+        primaryStage.setScene(new Scene(mainPane, this.width, this.height));
+        primaryStage.setTitle("Pool Game");
+        primaryStage.show();
+        draw(g2d);
+
         new AnimationTimer() {
             long last = -1;
 
@@ -89,20 +95,16 @@ public class PoolClient extends Application {
                 if (last == -1) {
                     last = now;
                 }
-                update((now - last) / 1000000000.0);
+                update((now - last) / 1000000000.0, primaryStage);
                 last = now;
                 draw(g2d);
             }
         }.start();
-
-        primaryStage.setScene(new Scene(mainPane, this.width, this.height));
-        primaryStage.setTitle("Pool Game");
-        primaryStage.show();
-        draw(g2d);
     }
 
-    private void update(double deltaTime) {
-
+    private void update(double deltaTime, Stage primaryStage) {
+        //stopt de thread als het tabje gesloten wordt
+        running = primaryStage.isShowing();
     }
 
     private void draw(FXGraphics2D g) {

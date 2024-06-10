@@ -13,12 +13,12 @@ public class ServerData implements Serializable {
     List<TransformCarrier> transforms = new ArrayList<>();
     TransformCarrier cue;
     boolean showcue;
-    int currentPlayer;
-    int player1;
-    int player2;
+    Player currentPlayer;
+    Player player1;
+    Player player2;
     String player1Nickname;
     String player2Nickname;
-    public ServerData(List<Ball> balls, int currentlyPlaying, int player1, int player2, AffineTransform cue, double cueRotation, boolean showCue) {
+    public ServerData(List<Ball> balls, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue) {
         for (Ball ball : balls) {
             transforms.add(new TransformCarrier(ball.getBall().getTransform()));
         }
@@ -53,27 +53,27 @@ public class ServerData implements Serializable {
         this.showcue = showcue;
     }
 
-    public int getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(int currentPlayer) {
+    public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public int getPlayer1() {
+    public Player getPlayer1() {
         return player1;
     }
 
-    public void setPlayer1(int player1) {
+    public void setPlayer1(Player player1) {
         this.player1 = player1;
     }
 
-    public int getPlayer2() {
+    public Player getPlayer2() {
         return player2;
     }
 
-    public void setPlayer2(int player2) {
+    public void setPlayer2(Player player2) {
         this.player2 = player2;
     }
 
