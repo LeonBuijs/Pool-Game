@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.dyn4j.geometry.Transform;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
+import utility.ClientData;
 import utility.ServerData;
 import utility.TransformCarrier;
 
@@ -178,5 +179,9 @@ public class PoolClient extends Application {
 
     private void send(Socket socket) throws IOException {
         OutputStream outputStream = socket.getOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+        objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), false));
+        System.out.println("sent");
     }
 }
