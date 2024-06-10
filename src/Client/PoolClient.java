@@ -3,7 +3,11 @@ package Client;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.dyn4j.geometry.Transform;
 import org.jfree.fx.FXGraphics2D;
@@ -30,6 +34,9 @@ public class PoolClient extends Application {
     private TransformCarrier cueTransform;
     private boolean showCue = false;
     private BufferedImage cueImage;
+
+    Slider sliderRotation = new Slider(0, 360, 180);
+    Slider sliderPower = new Slider(0, 100, 0);
 //    private ArrayList<Ball> balls = new ArrayList<>();
 //    private Ball ballWhite;
 
@@ -53,6 +60,23 @@ public class PoolClient extends Application {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
         mainPane.setCenter(canvas);
+
+        Label labelPower = new Label("Power: ");
+        sliderPower.setShowTickLabels(true);
+        HBox power = new HBox(labelPower, sliderPower);
+        power.setSpacing(10);
+
+        Label labelRotation = new Label("Rotation: ");
+        HBox rotation = new HBox(labelRotation, sliderRotation);
+        rotation.setSpacing(10);
+
+        Button fireButton = new Button("Fire");
+
+        HBox hBox = new HBox(power, rotation, fireButton);
+        hBox.setSpacing(100);
+
+        mainPane.setTop(hBox);
+
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         Socket socket = new Socket("localhost", 2001);
