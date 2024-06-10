@@ -100,6 +100,8 @@ public class PoolGame extends Application {
                             receive(finalSocket1);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 });
@@ -118,8 +120,8 @@ public class PoolGame extends Application {
         mousePicker = new MousePicker(canvas);
 
         sliderPower.setShowTickLabels(true);
-        HBox hbox = getHBox();
-        mainPane.setTop(hbox);
+//        HBox hbox = getHBox(); //Test
+//        mainPane.setTop(hbox);
 
         new AnimationTimer() {
             long last = -1;
