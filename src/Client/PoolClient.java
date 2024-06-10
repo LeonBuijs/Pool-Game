@@ -36,6 +36,7 @@ public class PoolClient extends Application {
     private boolean showCue = false;
     private BufferedImage cueImage;
     boolean running = true;
+    private boolean isMyTurn = false;
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -88,6 +89,8 @@ public class PoolClient extends Application {
                 try {
                     send(socket);
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -172,6 +175,15 @@ public class PoolClient extends Application {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
         ServerData data = (ServerData) objectInputStream.readObject();
+//        System.out.println(data.getCurrentPlayer().getPlayerNumber());
+//        System.out.println(data.getClientPlayer().getPlayerNumber());
+
+        if (data.getCurrentPlayer().getPlayerNumber() == data.getClientPlayer().getPlayerNumber()) {
+            isMyTurn = true;
+        } else {
+            isMyTurn = false;
+        }
+//        System.out.println(isMyTurn);
         if (!data.getTransforms().isEmpty()) {
             transformList = data.getTransforms();
         }
@@ -179,10 +191,14 @@ public class PoolClient extends Application {
         cueTransform = data.getCue();
     }
 
-    private void send(Socket socket) throws IOException {
-        OutputStream outputStream = socket.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+    private void send(Socket socket) throws IOException, InterruptedException {
+        //zonder sleep werkt dit niet fsr
+        Thread.sleep(1);
+        if (isMyTurn) {
+            OutputStream outputStream = socket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-        objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), false));
+            objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), false));
+        }
     }
 }

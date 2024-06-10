@@ -100,6 +100,7 @@ public class PoolGame extends Application {
                         } catch (IOException e) {
                             System.out.println("client disconnected");
                             running = false;
+                            player = null;
                         }
                     }
                 });
