@@ -62,6 +62,7 @@ public class PoolGame extends Application {
     private Turn turn = new Turn();
     private int playerCount = 0;
     private Label currentTurnLabel = new Label();
+    private ClientData playerdata;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -163,6 +164,7 @@ public class PoolGame extends Application {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
         ClientData data = (ClientData) objectInputStream.readObject();
+        playerdata = data;
         sliderPower.setValue(data.getPower());
         sliderRotation.setValue(data.getRotation());
         if (data.isFire() && showCue && player1 != null && player2 != null){
@@ -177,7 +179,7 @@ public class PoolGame extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue));
+            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerdata));
         }
     }
 

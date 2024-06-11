@@ -19,6 +19,8 @@ import utility.TransformCarrier;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
@@ -41,6 +43,7 @@ public class PoolClient extends Application {
     private Label currentTurnLabel = new Label();
     private Label playersLabel = new Label();
     private ServerData data;
+    private ClientData otherPlayerData;
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -151,6 +154,14 @@ public class PoolClient extends Application {
         g.setBackground(Color.white);
 
         g.clearRect(0, 0, width, height);
+        if (isMyTurn) {
+            drawPowerBar(g, sliderPower.getValue());
+        } else {
+            if (otherPlayerData != null) {
+                drawPowerBar(g, otherPlayerData.getPower());
+            }
+
+        }
 
         AffineTransform tx = new AffineTransform();
         tx.scale(7, 7);
@@ -158,7 +169,7 @@ public class PoolClient extends Application {
 
         AffineTransform pooltable = new AffineTransform();
         pooltable.scale(0.1, 0.1);
-        pooltable.translate(poolTable.getWidth()/2 - 150, poolTable.getHeight()/2 - 90);
+        pooltable.translate(poolTable.getWidth() / 2 - 150, poolTable.getHeight() / 2 - 90);
         g.drawImage(poolTable, pooltable, null);
 
         for (int i = 0; i <= 15; i++) {
@@ -186,6 +197,7 @@ public class PoolClient extends Application {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
         data = (ServerData) objectInputStream.readObject();
+        otherPlayerData = data.getOtherPlayerData();
 //        System.out.println(data.getCurrentPlayer().getPlayerNumber());
 //        System.out.println(data.getClientPlayer().getPlayerNumber());
 
@@ -215,5 +227,25 @@ public class PoolClient extends Application {
             }
             shoot = false;
         }
+    }
+
+    private void drawPowerBar(FXGraphics2D g, double power) {
+        Rectangle2D rectangle2D = new Rectangle2D.Double(1400, 99, 75, 501);
+        Point2D.Double start = new Point2D.Double(1400, 100);
+        Point2D.Double end = new Point2D.Double(1475, 600);
+
+        // Define the colors at the start and end points
+        float[] fractions = {0.0f, 1.0f};
+        Color[] colors = {Color.RED, Color.YELLOW};
+
+        // Create the LinearGradientPaint object
+        LinearGradientPaint gradientPaint = new LinearGradientPaint(start, end, fractions, colors);
+
+        g.setColor(Color.black);
+        g.draw(rectangle2D);
+        g.setPaint(gradientPaint);
+        rectangle2D = new Rectangle2D.Double(1400, 599 - (power * 5), 74, power * 5);
+        g.fill(rectangle2D);
+
     }
 }

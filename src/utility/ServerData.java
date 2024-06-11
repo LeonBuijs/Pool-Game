@@ -9,16 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerData implements Serializable {
-    List<TransformCarrier> transforms = new ArrayList<>();
-    TransformCarrier cue;
-    boolean showCue;
-    Player clientPlayer;
-    Player currentPlayer;
-    Player player1;
-    Player player2;
-    String player1Nickname;
-    String player2Nickname;
-    public ServerData(List<Ball> balls, Player clientPlayer, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue) {
+    private List<TransformCarrier> transforms = new ArrayList<>();
+    private TransformCarrier cue;
+    private boolean showCue;
+    private Player clientPlayer;
+    private Player currentPlayer;
+    private Player player1;
+    private Player player2;
+    private String player1Nickname;
+    private String player2Nickname;
+    private ClientData otherPlayerData;
+
+    public ServerData(List<Ball> balls, Player clientPlayer, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue, ClientData otherPlayerData) {
         for (Ball ball : balls) {
             transforms.add(new TransformCarrier(ball.getBall().getTransform()));
         }
@@ -28,6 +30,7 @@ public class ServerData implements Serializable {
         this.player2 = player2;
         this.cue = new TransformCarrier(cue, cueRotation);
         this.showCue = showCue;
+        this.otherPlayerData = otherPlayerData;
     }
 
     public List<TransformCarrier> getTransforms() {
@@ -100,5 +103,13 @@ public class ServerData implements Serializable {
 
     public void setPlayer2Nickname(String player2Nickname) {
         this.player2Nickname = player2Nickname;
+    }
+
+    public ClientData getOtherPlayerData() {
+        return otherPlayerData;
+    }
+
+    public void setOtherPlayerData(ClientData otherPlayerData) {
+        this.otherPlayerData = otherPlayerData;
     }
 }
