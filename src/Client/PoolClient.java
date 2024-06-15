@@ -149,6 +149,8 @@ public class PoolClient extends Application {
             }
         });
 
+        Label nameLabel = new Label("nickname: ");
+
         TextField textField = new TextField("Guest");
         textField.setMinWidth(200);
 
@@ -160,7 +162,7 @@ public class PoolClient extends Application {
             }
         });
 
-        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel, textField, changeNameButton);
+        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel, new HBox(nameLabel, textField, changeNameButton));
         hBox.setSpacing(100);
         return hBox;
     }

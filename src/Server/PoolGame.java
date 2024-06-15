@@ -107,6 +107,7 @@ public class PoolGame extends Application {
 
         new AnimationTimer() {
             long last = -1;
+
             @Override
             public void handle(long now) {
                 if (last == -1) {
@@ -148,11 +149,11 @@ public class PoolGame extends Application {
             boolean running = true;
             Player player = null;
             if (player1 == null) {
-                player = new Player(1, "p1");
+                player = new Player(1, "Guest");
                 player1 = player;
                 currentPlayer = player1;
             } else if (player2 == null) {
-                player = new Player(2, "p2");
+                player = new Player(2, "Guest");
                 player2 = player;
             }
             while (running) {
@@ -160,12 +161,22 @@ public class PoolGame extends Application {
                     send(finalSocket, player);
                 } catch (IOException e) {
                     System.out.println("client disconnected");
+                    clientDisconnected(player);
                     running = false;
                     player = null;
                 }
             }
         });
         return threadSend;
+    }
+
+    private void clientDisconnected(Player player) {
+        resetGame();
+        if (player.getPlayerNumber() == 1) {
+            player1 = player2;
+        } else if (player.getPlayerNumber() == 2) {
+            player2 = null;
+        }
     }
 
     private void receive(Socket socket) throws IOException, ClassNotFoundException {
@@ -176,7 +187,7 @@ public class PoolGame extends Application {
         playerData = data;
         sliderPower.setValue(data.getPower());
         sliderRotation.setValue(data.getRotation());
-        if (data.isFire() && showCue && player1 != null && player2 != null){
+        if (data.isFire() && showCue && player1 != null && player2 != null) {
             shootBall();
             turn = new Turn();
             turn.setTurnActive(true);
@@ -240,13 +251,7 @@ public class PoolGame extends Application {
         createWalls();
         createCheckers();
 
-        //todo dit door server verbinding uiteindelijk afhandelen
-//        player1 = new Player(1, "p1");
-//        player2 = new Player(2, "p2");
-
         currentPlayer = player1;
-
-//        currentTurnLabel.setText("Current turn: " + player1.getNickName());
     }
 
     private void draw(FXGraphics2D g) {
@@ -386,7 +391,6 @@ public class PoolGame extends Application {
 
     private boolean checkPlayerHasBallType(Ball ball) {
         Player otherPlayer = getOtherPlayer();
-        //todo
         if (currentPlayer.getBallType() == null && otherPlayer.getBallType() == null) {
             currentPlayer.setBallType(ball.getBallType());
             if (ball.getBallType().equals(BallType.WHOLE)) {
