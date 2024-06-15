@@ -6,10 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.dyn4j.geometry.Transform;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 import utility.BallType;
@@ -77,27 +77,36 @@ public class PoolClient extends Application {
 
         Label labelPower = new Label("Power: ");
         sliderPower.setShowTickLabels(true);
-        HBox power = new HBox(labelPower, sliderPower);
-        power.setSpacing(10);
-
-        Label labelRotation = new Label("Rotation: ");
-        HBox rotation = new HBox(labelRotation, sliderRotation);
-        rotation.setSpacing(10);
-
-        Button fireButton = new Button("Fire");
-        fireButton.setOnAction(event -> {
-            if (sliderPower.getValue() != 0) {
-                this.shoot = true;
-            }
-        });
-
-        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel);
-        hBox.setSpacing(100);
+        HBox hBox = getHBox(labelPower);
 
         mainPane.setTop(hBox);
 
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
+        Thread threadReceive = getThreads();
+        threadReceive.start();
+
+        primaryStage.setScene(new Scene(mainPane, this.width, this.height));
+        primaryStage.setTitle("Pool Game");
+        primaryStage.show();
+        draw(g2d);
+
+        new AnimationTimer() {
+            long last = -1;
+
+            @Override
+            public void handle(long now) {
+                if (last == -1) {
+                    last = now;
+                }
+                update((now - last) / 1000000000.0, primaryStage);
+                last = now;
+                draw(g2d);
+            }
+        }.start();
+    }
+
+    private Thread getThreads() throws IOException {
         Socket socket = new Socket("localhost", 2001);
 
         Thread threadSend = new Thread(() -> {
@@ -124,33 +133,42 @@ public class PoolClient extends Application {
                 }
             }
         });
-        threadReceive.start();
+        return threadReceive;
+    }
 
-        primaryStage.setScene(new Scene(mainPane, this.width, this.height));
-        primaryStage.setTitle("Pool Game");
-        primaryStage.show();
-        draw(g2d);
+    private HBox getHBox(Label labelPower) {
+        HBox power = new HBox(labelPower, sliderPower);
+        power.setSpacing(10);
 
-        new AnimationTimer() {
-            long last = -1;
+        Label labelRotation = new Label("Rotation: ");
+        HBox rotation = new HBox(labelRotation, sliderRotation);
+        rotation.setSpacing(10);
 
-            @Override
-            public void handle(long now) {
-                if (last == -1) {
-                    last = now;
-                }
-                update((now - last) / 1000000000.0, primaryStage);
-                last = now;
-                draw(g2d);
+        Button fireButton = new Button("Fire");
+        fireButton.setOnAction(event -> {
+            if (sliderPower.getValue() != 0) {
+                this.shoot = true;
             }
-        }.start();
+        });
+
+        TextField textField = new TextField("Guest");
+        textField.setMinWidth(200);
+
+        Button changeNameButton = new Button("Change");
+        changeNameButton.setOnAction(e -> {
+            this.nickname = textField.getText();
+        });
+
+        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel, textField, changeNameButton);
+        hBox.setSpacing(100);
+        return hBox;
     }
 
     private void update(double deltaTime, Stage primaryStage) {
         //stopt de thread als het tabje gesloten wordt
         running = primaryStage.isShowing();
         currentTurnLabel.setText("Current turn: " + data.getCurrentPlayer().getNickName() + " " + data.getCurrentPlayer().getBallType());
-        playersLabel.setText(data.getPlayer1Nickname() + " vs " + data.getPlayer2Nickname()); //TODO: deze methodes returnen null
+        playersLabel.setText(data.getPlayer1Nickname() + " VS " + data.getPlayer2Nickname()); //TODO: deze methodes returnen null
         playerNames = data.getPlayer1Nickname() + " VS " + data.getPlayer2Nickname();
     }
 
@@ -229,7 +247,7 @@ public class PoolClient extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ClientData("Naam", sliderRotation.getValue(), sliderPower.getValue(), this.shoot));
+            objectOutputStream.writeObject(new ClientData(data.getClientPlayer(), nickname, sliderRotation.getValue(), sliderPower.getValue(), this.shoot));
             if (shoot) {
                 sliderPower.setValue(0);
             }
@@ -259,8 +277,8 @@ public class PoolClient extends Application {
     private void drawPlayerNames(FXGraphics2D g) {
         g.setColor(Color.black);
         g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 25));
-        g.drawString(this.playerNames, this.width/2 - ((int)(this.playerNames.length()*7.5)), 50);
-        g.drawLine(this.width/2, 0, this.width/2, this.height);
+        g.drawString(this.playerNames, this.width / 2 - ((int) (this.playerNames.length() * 7.5)), 50);
+        g.drawLine(this.width / 2, 0, this.width / 2, this.height);
 
         AffineTransform transform = new AffineTransform();
         AffineTransform transform2 = new AffineTransform();
@@ -269,23 +287,29 @@ public class PoolClient extends Application {
         transform.scale(0.2, 0.2);
         transform2.scale(0.2, 0.2);
 
-        if (data != null && data.getPlayer1().getBallType() != null) {
-            if (data.getPlayer1().getBallType().equals(BallType.HALF)) {
-                // Half links & Heel rechts
-                for (int i = 0; i < 7; i++) {
-                    g.drawImage(balls.get(i), transform, null);
-                    g.drawImage(balls.get(i+8), transform2, null);
-                    transform.translate(balls.get(i).getWidth() + 20, 0);
-                    transform2.translate(balls.get(i).getWidth() + 20, 0);
-                }
-            } else if (data.getPlayer1().getBallType().equals(BallType.WHOLE)) {
-                // Heel links & Half rechts
-                for (int i = 0; i < 7; i++) {
-                    g.drawImage(balls.get(i+8), transform, null);
-                    g.drawImage(balls.get(i), transform2, null);
-                    transform.translate(balls.get(i).getWidth() + 20, 0);
-                    transform2.translate(balls.get(i).getWidth() + 20, 0);
-                }
+        if (data == null) {
+            return;
+        }
+
+        if (data.getPlayer1().getBallType() == null) {
+            return;
+        }
+
+        if (data.getPlayer1().getBallType().equals(BallType.WHOLE)) {
+            // Half links & Heel rechts
+            for (int i = 0; i < 7; i++) {
+                g.drawImage(balls.get(i), transform, null);
+                g.drawImage(balls.get(i + 8), transform2, null);
+                transform.translate(balls.get(i).getWidth() + 20, 0);
+                transform2.translate(balls.get(i).getWidth() + 20, 0);
+            }
+        } else if (data.getPlayer1().getBallType().equals(BallType.HALF)) {
+            // Heel links & Half rechts
+            for (int i = 0; i < 7; i++) {
+                g.drawImage(balls.get(i + 8), transform, null);
+                g.drawImage(balls.get(i), transform2, null);
+                transform.translate(balls.get(i).getWidth() + 20, 0);
+                transform2.translate(balls.get(i).getWidth() + 20, 0);
             }
         }
     }

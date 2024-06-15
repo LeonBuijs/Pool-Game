@@ -31,6 +31,22 @@ public class ServerData implements Serializable {
         this.cue = new TransformCarrier(cue, cueRotation);
         this.showCue = showCue;
         this.otherPlayerData = otherPlayerData;
+
+        applyNickname(clientPlayer);
+    }
+
+    private void applyNickname(Player clientPlayer) {
+        if (clientPlayer.equals(player1)) {
+            player1Nickname = clientPlayer.getNickName();
+            if (player2 != null) {
+                player2Nickname = player2.getNickName();
+            }
+        } else if (clientPlayer.equals(player2)) {
+            player2Nickname = clientPlayer.getNickName();
+            if (player1 != null) {
+                player1Nickname = player1.getNickName();
+            }
+        }
     }
 
     public List<TransformCarrier> getTransforms() {

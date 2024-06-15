@@ -182,6 +182,15 @@ public class PoolGame extends Application {
             turn = new Turn();
             turn.setTurnActive(true);
         }
+
+        int playerNumber = data.getClientPlayer().getPlayerNumber();
+        if (playerNumber == 1) {
+            player1.setNickName(data.getNickname());
+            System.out.println(data.getNickname());
+        } else if (playerNumber == 2) {
+            player2.setNickName(data.getNickname());
+            System.out.println(data.getNickname());
+        }
     }
 
     private void send(Socket socket, Player player) throws IOException {

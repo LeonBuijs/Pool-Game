@@ -37,6 +37,10 @@ public class Player implements Serializable {
         this.ballType = ballType;
     }
 
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     @Override
     public String toString() {
         return "Server.Player{" +

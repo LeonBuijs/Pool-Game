@@ -1,33 +1,45 @@
 package utility;
 
+import Server.Player;
+
 import java.io.Serializable;
 
 public class ClientData implements Serializable {
-    private String nickName;
+    private Player clientPlayer;
+    private String nickname;
     private double rotation;
     private double power;
     private boolean fire;
 
-    public ClientData(String nickName, double rotation, double power, boolean fire) {
-        this.nickName = nickName;
+//    public ClientData(Player clientPlayer, double rotation, double power, boolean fire) {
+//        this.clientPlayer = clientPlayer;
+//        this.rotation = rotation;
+//        this.power = power;
+//        this.fire = fire;
+//    }
+
+    public ClientData(Player clientPlayer, String nickname, double rotation, double power, boolean fire) {
+        this.clientPlayer = clientPlayer;
+        this.nickname = nickname;
         this.rotation = rotation;
         this.power = power;
         this.fire = fire;
     }
 
-    public ClientData(double rotation, double power, boolean fire) {
-        this.nickName = "";
-        this.rotation = rotation;
-        this.power = power;
-        this.fire = fire;
+    public Player getClientPlayer() {
+        return clientPlayer;
     }
 
-    public String getNickName() {
-        return nickName;
+    public void setClientPlayer(Player clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public double getRotation() {
