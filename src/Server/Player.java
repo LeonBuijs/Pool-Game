@@ -1,13 +1,15 @@
 package Server;
 
+import utility.BallType;
+
 import java.io.Serializable;
 
 public class Player implements Serializable {
     private int playerNumber;
     private String nickName;
-    private Ball.BallType ballType;
+    private BallType ballType;
 
-    public Player(int playerNumber, String nickName, Ball.BallType ballType) {
+    public Player(int playerNumber, String nickName, BallType ballType) {
         this.playerNumber = playerNumber;
         this.nickName = nickName;
         this.ballType = ballType;
@@ -27,11 +29,11 @@ public class Player implements Serializable {
         return nickName;
     }
 
-    public Ball.BallType getBallType() {
+    public BallType getBallType() {
         return ballType;
     }
 
-    public void setBallType(Ball.BallType ballType) {
+    public void setBallType(BallType ballType) {
         this.ballType = ballType;
     }
 

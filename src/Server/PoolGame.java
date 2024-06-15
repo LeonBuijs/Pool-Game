@@ -313,9 +313,9 @@ public class PoolGame extends Application {
             if (!ball.isPotted()) {
                 if (ball.checkInPocket(checkingCorners)) {
                     turn.setNoBallPotted(false);
-                    if (ball.getBallType() != Ball.BallType.WHITE) {
+                    if (ball.getBallType() != BallType.WHITE) {
                         ball.setPotted(true);
-                        if (ball.getBallType() == Ball.BallType.BLACK) {
+                        if (ball.getBallType() == BallType.BLACK) {
                             boolean allPotted = true;
 
                             for (Ball anBall : ballObjectList) {
@@ -340,7 +340,7 @@ public class PoolGame extends Application {
                     }
                 }
             } else {
-                if (ball.getBallType() != Ball.BallType.WHITE) {
+                if (ball.getBallType() != BallType.WHITE) {
                     Transform transform = new Transform();
                     transform.setTranslation(0, 0);
                     ball.getBall().setTransform(transform);
@@ -365,10 +365,10 @@ public class PoolGame extends Application {
 
     private void checkWholeAndHalfPocketed(Ball ball) {
         boolean hasBallType = true;
-        if (ball.getBallType() == Ball.BallType.WHOLE) {
+        if (ball.getBallType() == BallType.WHOLE) {
             hasBallType = checkPlayerHasBallType(ball);
             lastPottedWhole = ball.getWhichPocket();
-        } else if (ball.getBallType() == Ball.BallType.HALF) {
+        } else if (ball.getBallType() == BallType.HALF) {
             hasBallType = checkPlayerHasBallType(ball);
             lastPottedHalf = ball.getWhichPocket();
         }
@@ -383,10 +383,10 @@ public class PoolGame extends Application {
         //todo
         if (currentPlayer.getBallType() == null && otherPlayer.getBallType() == null) {
             currentPlayer.setBallType(ball.getBallType());
-            if (ball.getBallType().equals(Ball.BallType.WHOLE)) {
-                otherPlayer.setBallType(Ball.BallType.HALF);
+            if (ball.getBallType().equals(BallType.WHOLE)) {
+                otherPlayer.setBallType(BallType.HALF);
             } else {
-                otherPlayer.setBallType(Ball.BallType.WHOLE);
+                otherPlayer.setBallType(BallType.WHOLE);
             }
             return true;
         } else if (currentPlayer.getBallType().equals(ball.getBallType())) {
@@ -440,16 +440,16 @@ public class PoolGame extends Application {
             //toevoegen aan lijsten
             Ball ball;
             if (i == 16) {
-                ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
+                ball = new Ball(BallType.WHITE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i < 8) {
-                ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
+                ball = new Ball(BallType.WHOLE, ballBody, ballObject);
                 ballsWhole.add(ball);
             } else if (i == 8) {
-                ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
+                ball = new Ball(BallType.BLACK, ballBody, ballObject);
                 ballBlack = ball;
             } else {
-                ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
+                ball = new Ball(BallType.HALF, ballBody, ballObject);
                 ballsHalf.add(ball);
             }
 
@@ -475,7 +475,7 @@ public class PoolGame extends Application {
         ballBody.setMass(MassType.NORMAL);
 
         GameObject ballObject = new GameObject("res/ball_white.png", ballBody, new Vector2(0, 0), 0.0115);
-        Ball ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
+        Ball ball = new Ball(BallType.WHITE, ballBody, ballObject);
         ballWhite = ball;
 
         ballObjectList.add(ball);
@@ -532,9 +532,9 @@ public class PoolGame extends Application {
     private boolean checkInCorrectPocket() {
         int lastPocketed;
 
-        if (currentPlayer.getBallType().equals(Ball.BallType.WHOLE)) {
+        if (currentPlayer.getBallType().equals(BallType.WHOLE)) {
             lastPocketed = lastPottedWhole;
-        } else if (currentPlayer.getBallType().equals(Ball.BallType.HALF)) {
+        } else if (currentPlayer.getBallType().equals(BallType.HALF)) {
             lastPocketed = lastPottedHalf;
         } else {
             return false;

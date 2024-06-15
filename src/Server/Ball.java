@@ -2,6 +2,7 @@ package Server;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
+import utility.BallType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,8 +73,6 @@ public class Ball {
         return ballObject;
     }
 
-    public enum BallType implements Serializable {HALF, WHOLE, BLACK, WHITE}
-
     public boolean isPotted() {
         return potted;
     }
@@ -81,4 +80,6 @@ public class Ball {
     public void setPotted(boolean potted) {
         this.potted = potted;
     }
+
+//    public enum BallType implements Serializable {HALF, WHOLE, BLACK, WHITE}
 }

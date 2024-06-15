@@ -14,6 +14,7 @@ import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+import utility.BallType;
 import utility.ServerData;
 
 
@@ -101,16 +102,16 @@ public class PoolServer {
             //toevoegen aan lijsten
             Ball ball;
             if (i == 0) {
-                ball = new Ball(Ball.BallType.WHITE, ballBody, ballObject);
+                ball = new Ball(BallType.WHITE, ballBody, ballObject);
                 ballWhite = ball;
             } else if (i < 8) {
-                ball = new Ball(Ball.BallType.WHOLE, ballBody, ballObject);
+                ball = new Ball(BallType.WHOLE, ballBody, ballObject);
                 ballsWhole.add(ball);
             } else if (i == 8) {
-                ball = new Ball(Ball.BallType.BLACK, ballBody, ballObject);
+                ball = new Ball(BallType.BLACK, ballBody, ballObject);
                 ballBlack = ball;
             } else {
-                ball = new Ball(Ball.BallType.HALF, ballBody, ballObject);
+                ball = new Ball(BallType.HALF, ballBody, ballObject);
                 ballsHalf.add(ball);
             }
 

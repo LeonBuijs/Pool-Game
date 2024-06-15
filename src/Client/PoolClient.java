@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.dyn4j.geometry.Transform;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
+import utility.BallType;
 import utility.ClientData;
 import utility.ServerData;
 import utility.TransformCarrier;
@@ -44,6 +45,7 @@ public class PoolClient extends Application {
     private Label playersLabel = new Label();
     private ServerData data;
     private ClientData otherPlayerData;
+    private String nickname = "Guest";
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -171,10 +173,10 @@ public class PoolClient extends Application {
         tx.scale(7, 7);
         g.setTransform(tx);
 
-        AffineTransform pooltable = new AffineTransform();
-        pooltable.scale(0.1, 0.1);
-        pooltable.translate(poolTable.getWidth() / 2 - 150, poolTable.getHeight() / 2 - 90);
-        g.drawImage(poolTable, pooltable, null);
+        AffineTransform poolTable = new AffineTransform();
+        poolTable.scale(0.1, 0.1);
+        poolTable.translate(this.poolTable.getWidth() / 2 - 150, this.poolTable.getHeight() / 2 - 90);
+        g.drawImage(this.poolTable, poolTable, null);
 
         for (int i = 0; i <= 15; i++) {
             TransformCarrier transform = transformList.get(i);
@@ -186,13 +188,14 @@ public class PoolClient extends Application {
             g.drawImage(balls.get(i), tx1, null);
         }
         if (showCue) {
-            AffineTransform cue = new AffineTransform();
-            cue.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115) / 2,
-                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) / 2 - 0.5);
-            cue.scale(0.1, 0.1);
-            cue.scale(0.15, 0.15);
-            cue.rotate(Math.toRadians(cueTransform.getRotation()));
-            g.drawImage(cueImage, cue, null);
+            //todo afstand fixen
+            AffineTransform cueTransform = new AffineTransform();
+            cueTransform.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115 - 1.5),
+                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) - 1.5);
+            cueTransform.scale(0.1, 0.1);
+            cueTransform.scale(0.15, 0.15);
+            cueTransform.rotate(Math.toRadians(this.cueTransform.getRotation()), cueTransform.getTranslateX(), cueTransform.getTranslateY());
+            g.drawImage(cueImage, cueTransform, null);
         }
     }
 
@@ -267,7 +270,7 @@ public class PoolClient extends Application {
         transform2.scale(0.2, 0.2);
 
         if (data != null && data.getPlayer1().getBallType() != null) {
-            if (data.getPlayer1().getBallType().equals(Ball.BallType.HALF)) {
+            if (data.getPlayer1().getBallType().equals(BallType.HALF)) {
                 // Half links & Heel rechts
                 for (int i = 0; i < 7; i++) {
                     g.drawImage(balls.get(i), transform, null);
@@ -275,7 +278,7 @@ public class PoolClient extends Application {
                     transform.translate(balls.get(i).getWidth() + 20, 0);
                     transform2.translate(balls.get(i).getWidth() + 20, 0);
                 }
-            } else if (data.getPlayer1().getBallType().equals(Ball.BallType.WHOLE)) {
+            } else if (data.getPlayer1().getBallType().equals(BallType.WHOLE)) {
                 // Heel links & Half rechts
                 for (int i = 0; i < 7; i++) {
                     g.drawImage(balls.get(i+8), transform, null);

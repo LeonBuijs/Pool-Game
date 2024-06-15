@@ -1,5 +1,6 @@
 package Client;
 
+import utility.BallType;
 import Server.GameObject;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -72,7 +73,7 @@ public class Ball {
         return ballObject;
     }
 
-    public enum BallType {HALF, WHOLE, BLACK, WHITE}
+//    public enum BallType {HALF, WHOLE, BLACK, WHITE}
 
     public boolean isPotted() {
         return potted;
