@@ -264,21 +264,24 @@ public class PoolClient extends Application {
         transform2.translate(825, 75);
         transform.scale(0.2, 0.2);
         transform2.scale(0.2, 0.2);
-        for (int i = 0; i < 7; i++) {
-            g.drawImage(balls.get(i), transform, null);
-            g.drawImage(balls.get(i+8), transform2, null);
-            transform.translate(balls.get(i).getWidth() + 20, 0);
-            transform2.translate(balls.get(i).getWidth() + 20, 0);
-        }
+
         if (data != null && data.getPlayer1().getBallType() != null) {
             if (data.getPlayer1().getBallType().equals(Ball.BallType.HALF)) {
                 // Half links & Heel rechts
                 for (int i = 0; i < 7; i++) {
                     g.drawImage(balls.get(i), transform, null);
-                    transform.translate(balls.get(i).getWidth() + 10, 0);
+                    g.drawImage(balls.get(i+8), transform2, null);
+                    transform.translate(balls.get(i).getWidth() + 20, 0);
+                    transform2.translate(balls.get(i).getWidth() + 20, 0);
                 }
             } else if (data.getPlayer1().getBallType().equals(Ball.BallType.WHOLE)) {
                 // Heel links & Half rechts
+                for (int i = 0; i < 7; i++) {
+                    g.drawImage(balls.get(i+8), transform, null);
+                    g.drawImage(balls.get(i), transform2, null);
+                    transform.translate(balls.get(i).getWidth() + 20, 0);
+                    transform2.translate(balls.get(i).getWidth() + 20, 0);
+                }
             }
         }
     }
