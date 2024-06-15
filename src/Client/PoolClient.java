@@ -47,6 +47,8 @@ public class PoolClient extends Application {
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
+
+    private String playerNames = "";
 //    private ArrayList<Ball> balls = new ArrayList<>();
 //    private Ball ballWhite;
 
@@ -147,6 +149,7 @@ public class PoolClient extends Application {
         running = primaryStage.isShowing();
         currentTurnLabel.setText("Current turn: " + data.getCurrentPlayer().getNickName() + " " + data.getCurrentPlayer().getBallType());
         playersLabel.setText(data.getPlayer1Nickname() + " vs " + data.getPlayer2Nickname()); //TODO: deze methodes returnen null
+        playerNames = data.getPlayer1Nickname() + " VS " + data.getPlayer2Nickname();
     }
 
     private void draw(FXGraphics2D g) {
@@ -154,6 +157,7 @@ public class PoolClient extends Application {
         g.setBackground(Color.white);
 
         g.clearRect(0, 0, width, height);
+        drawPlayerNames(g);
         if (isMyTurn) {
             drawPowerBar(g, sliderPower.getValue());
         } else {
@@ -246,6 +250,36 @@ public class PoolClient extends Application {
         g.setPaint(gradientPaint);
         rectangle2D = new Rectangle2D.Double(1400, 599 - (power * 5), 74, power * 5);
         g.fill(rectangle2D);
+    }
 
+    private void drawPlayerNames(FXGraphics2D g) {
+        g.setColor(Color.black);
+        g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 25));
+        g.drawString(this.playerNames, this.width/2 - ((int)(this.playerNames.length()*7.5)), 50);
+        g.drawLine(this.width/2, 0, this.width/2, this.height);
+
+        AffineTransform transform = new AffineTransform();
+        AffineTransform transform2 = new AffineTransform();
+        transform.translate(550, 75);
+        transform2.translate(825, 75);
+        transform.scale(0.2, 0.2);
+        transform2.scale(0.2, 0.2);
+        for (int i = 0; i < 7; i++) {
+            g.drawImage(balls.get(i), transform, null);
+            g.drawImage(balls.get(i+8), transform2, null);
+            transform.translate(balls.get(i).getWidth() + 20, 0);
+            transform2.translate(balls.get(i).getWidth() + 20, 0);
+        }
+        if (data != null && data.getPlayer1().getBallType() != null) {
+            if (data.getPlayer1().getBallType().equals(Ball.BallType.HALF)) {
+                // Half links & Heel rechts
+                for (int i = 0; i < 7; i++) {
+                    g.drawImage(balls.get(i), transform, null);
+                    transform.translate(balls.get(i).getWidth() + 10, 0);
+                }
+            } else if (data.getPlayer1().getBallType().equals(Ball.BallType.WHOLE)) {
+                // Heel links & Half rechts
+            }
+        }
     }
 }
