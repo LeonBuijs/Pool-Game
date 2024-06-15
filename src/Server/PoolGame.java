@@ -83,44 +83,10 @@ public class PoolGame extends Application {
                 }
                 System.out.println("Er is een verbinding");
 
-                Socket finalSocket = socket;
-                Thread threadSend = new Thread(() -> {
-                    boolean running = true;
-                    Player player = null;
-                    if (player1 == null) {
-                        player = new Player(1, "p1");
-                        player1 = player;
-                        currentPlayer = player1;
-                    } else if (player2 == null) {
-                        player = new Player(2, "p2");
-                        player2 = player;
-                    }
-                    while (running) {
-                        try {
-                            send(finalSocket, player);
-                        } catch (IOException e) {
-                            System.out.println("client disconnected");
-                            running = false;
-                            player = null;
-                        }
-                    }
-                });
+                Thread threadSend = getThreadSend(socket);
                 threadSend.start();
 
-                Socket finalSocket1 = socket;
-                Thread threadReceive = new Thread(() -> {
-                    boolean running = true;
-                    while (running) {
-                        try {
-                            receive(finalSocket1);
-                        } catch (IOException e) {
-                            System.out.println("client disconnected");
-                            running = false;
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
+                Thread threadReceive = getThreadReceive(socket);
                 threadReceive.start();
             }
         });
@@ -157,6 +123,50 @@ public class PoolGame extends Application {
         primaryStage.setTitle("Pool Game");
         primaryStage.show();
         draw(g2d);
+    }
+
+    private Thread getThreadReceive(Socket socket) {
+        Socket finalSocket1 = socket;
+        Thread threadReceive = new Thread(() -> {
+            boolean running = true;
+            while (running) {
+                try {
+                    receive(finalSocket1);
+                } catch (IOException e) {
+                    System.out.println("client disconnected");
+                    running = false;
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return threadReceive;
+    }
+
+    private Thread getThreadSend(Socket socket) {
+        Socket finalSocket = socket;
+        Thread threadSend = new Thread(() -> {
+            boolean running = true;
+            Player player = null;
+            if (player1 == null) {
+                player = new Player(1, "p1");
+                player1 = player;
+                currentPlayer = player1;
+            } else if (player2 == null) {
+                player = new Player(2, "p2");
+                player2 = player;
+            }
+            while (running) {
+                try {
+                    send(finalSocket, player);
+                } catch (IOException e) {
+                    System.out.println("client disconnected");
+                    running = false;
+                    player = null;
+                }
+            }
+        });
+        return threadSend;
     }
 
     private void receive(Socket socket) throws IOException, ClassNotFoundException {

@@ -216,6 +216,7 @@ public class PoolClient extends Application {
         }
 
         cueTransform = data.getCue();
+        showCue = data.isShowCue();
     }
 
     private void send(Socket socket) throws IOException, InterruptedException {
