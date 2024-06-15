@@ -62,7 +62,7 @@ public class PoolGame extends Application {
     private Turn turn = new Turn();
     private int playerCount = 0;
     private Label currentTurnLabel = new Label();
-    private ClientData playerdata;
+    private ClientData playerData;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -107,7 +107,6 @@ public class PoolGame extends Application {
 
         new AnimationTimer() {
             long last = -1;
-
             @Override
             public void handle(long now) {
                 if (last == -1) {
@@ -174,7 +173,7 @@ public class PoolGame extends Application {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
         ClientData data = (ClientData) objectInputStream.readObject();
-        playerdata = data;
+        playerData = data;
         sliderPower.setValue(data.getPower());
         sliderRotation.setValue(data.getRotation());
         if (data.isFire() && showCue && player1 != null && player2 != null){
@@ -186,10 +185,8 @@ public class PoolGame extends Application {
         int playerNumber = data.getClientPlayer().getPlayerNumber();
         if (playerNumber == 1) {
             player1.setNickName(data.getNickname());
-            System.out.println(data.getNickname());
         } else if (playerNumber == 2) {
             player2.setNickName(data.getNickname());
-            System.out.println(data.getNickname());
         }
     }
 
@@ -198,7 +195,7 @@ public class PoolGame extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerdata));
+            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerData));
         }
     }
 

@@ -51,8 +51,6 @@ public class PoolClient extends Application {
     Slider sliderPower = new Slider(0, 100, 0);
 
     private String playerNames = "";
-//    private ArrayList<Ball> balls = new ArrayList<>();
-//    private Ball ballWhite;
 
     public void init() throws IOException {
         for (int i = 1; i <= 15; i++) {
@@ -157,6 +155,9 @@ public class PoolClient extends Application {
         Button changeNameButton = new Button("Change");
         changeNameButton.setOnAction(e -> {
             this.nickname = textField.getText();
+            if (data != null) {
+                data.getClientPlayer().setNickName(nickname);
+            }
         });
 
         HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel, textField, changeNameButton);
@@ -167,9 +168,16 @@ public class PoolClient extends Application {
     private void update(double deltaTime, Stage primaryStage) {
         //stopt de thread als het tabje gesloten wordt
         running = primaryStage.isShowing();
-        currentTurnLabel.setText("Current turn: " + data.getCurrentPlayer().getNickName() + " " + data.getCurrentPlayer().getBallType());
-        playersLabel.setText(data.getPlayer1Nickname() + " VS " + data.getPlayer2Nickname()); //TODO: deze methodes returnen null
-        playerNames = data.getPlayer1Nickname() + " VS " + data.getPlayer2Nickname();
+
+        //los object zodat thread niet tussendoor het data-object aanpast
+        ServerData data1 = data;
+
+        data1.getClientPlayer().setNickName(nickname);
+        data1.applyNickname(data1.getClientPlayer());
+
+        currentTurnLabel.setText("Current turn: " + data1.getCurrentPlayer().getNickName() + " " + data1.getCurrentPlayer().getBallType());
+        playersLabel.setText(data1.getPlayer1Nickname() + " VS " + data1.getPlayer2Nickname());
+        playerNames = data1.getPlayer1Nickname() + " VS " + data1.getPlayer2Nickname();
     }
 
     private void draw(FXGraphics2D g) {
@@ -184,7 +192,6 @@ public class PoolClient extends Application {
             if (otherPlayerData != null) {
                 drawPowerBar(g, otherPlayerData.getPower());
             }
-
         }
 
         AffineTransform tx = new AffineTransform();
@@ -223,15 +230,12 @@ public class PoolClient extends Application {
 
         data = (ServerData) objectInputStream.readObject();
         otherPlayerData = data.getOtherPlayerData();
-//        System.out.println(data.getCurrentPlayer().getPlayerNumber());
-//        System.out.println(data.getClientPlayer().getPlayerNumber());
 
         if (data.getCurrentPlayer().getPlayerNumber() == data.getClientPlayer().getPlayerNumber()) {
             isMyTurn = true;
         } else {
             isMyTurn = false;
         }
-//        System.out.println(isMyTurn);
         if (!data.getTransforms().isEmpty()) {
             transformList = data.getTransforms();
         }

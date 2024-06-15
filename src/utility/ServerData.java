@@ -35,13 +35,13 @@ public class ServerData implements Serializable {
         applyNickname(clientPlayer);
     }
 
-    private void applyNickname(Player clientPlayer) {
-        if (clientPlayer.equals(player1)) {
+    public void applyNickname(Player clientPlayer) {
+        if (clientPlayer.getPlayerNumber() == 1) {
             player1Nickname = clientPlayer.getNickName();
             if (player2 != null) {
                 player2Nickname = player2.getNickName();
             }
-        } else if (clientPlayer.equals(player2)) {
+        } else if (clientPlayer.getPlayerNumber() == 2) {
             player2Nickname = clientPlayer.getNickName();
             if (player1 != null) {
                 player1Nickname = player1.getNickName();
