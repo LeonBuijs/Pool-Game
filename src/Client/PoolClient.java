@@ -3,19 +3,16 @@ package Client;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
-import utility.BallType;
-import utility.ClientData;
-import utility.ServerData;
-import utility.TransformCarrier;
+import utility.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,6 +24,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public class PoolClient extends Application {
     private int width = 1600;
@@ -46,6 +44,7 @@ public class PoolClient extends Application {
     private ServerData data;
     private ClientData otherPlayerData;
     private String nickname = "Guest";
+    private NameChecker nameChecker = new NameChecker();
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -154,16 +153,35 @@ public class PoolClient extends Application {
         TextField textField = new TextField("Guest");
         textField.setMinWidth(200);
 
+        UnaryOperator<TextFormatter.Change> rejectChange = change -> {
+            if (change.isContentChange()) {
+                if (change.getControlNewText().length() > 12) {
+                    return null;
+                }
+            }
+            return change;
+        };
+
+        textField.setTextFormatter(new TextFormatter<>(rejectChange));
+
         Button changeNameButton = new Button("Change");
         changeNameButton.setOnAction(e -> {
-            this.nickname = textField.getText();
-            if (data != null) {
+            if (data == null) {
+                return;
+            }
+
+            if (nameChecker.checkNickname(textField.getText())) {
+                this.nickname = textField.getText();
                 data.getClientPlayer().setNickName(nickname);
+            } else {
+                this.nickname = "naughty";
+                data.getClientPlayer().setNickName("naughty");
+                textField.setText("naughty");
             }
         });
 
         HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel, new HBox(nameLabel, textField, changeNameButton));
-        hBox.setSpacing(100);
+        hBox.setSpacing(50);
         return hBox;
     }
 
@@ -177,7 +195,7 @@ public class PoolClient extends Application {
         data1.getClientPlayer().setNickName(nickname);
         data1.applyNickname(data1.getClientPlayer());
 
-        currentTurnLabel.setText("Current turn: " + data1.getCurrentPlayer().getNickName() + " " + data1.getCurrentPlayer().getBallType());
+        currentTurnLabel.setText("Current turn: " + data1.getCurrentPlayer().getNickName());
         playersLabel.setText(data1.getPlayer1Nickname() + " VS " + data1.getPlayer2Nickname());
         playerNames = data1.getPlayer1Nickname() + " VS " + data1.getPlayer2Nickname();
     }
@@ -217,8 +235,8 @@ public class PoolClient extends Application {
         if (showCue) {
             //todo afstand fixen
             AffineTransform cueTransform = new AffineTransform();
-            cueTransform.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115 - 1.5),
-                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) - 1.5);
+            cueTransform.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115 - 1.5 + Math.cos(Math.toRadians(this.cueTransform.getRotation())) * 2.5),
+                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) - 1.5 + Math.sin(Math.toRadians(this.cueTransform.getRotation())) * 2.5);
             cueTransform.scale(0.1, 0.1);
             cueTransform.scale(0.15, 0.15);
             cueTransform.rotate(Math.toRadians(this.cueTransform.getRotation()), cueTransform.getTranslateX(), cueTransform.getTranslateY());
