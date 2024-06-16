@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
@@ -24,6 +25,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 public class PoolClient extends Application {
@@ -80,13 +82,29 @@ public class PoolClient extends Application {
 
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
-        Thread threadReceive = getThreads();
-        threadReceive.start();
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setTitle("Server IP-address");
 
-        primaryStage.setScene(new Scene(mainPane, this.width, this.height));
-        primaryStage.setTitle("Pool Game");
-        primaryStage.show();
-        draw(g2d);
+        GridPane gridPane = new GridPane();
+        TextField ipField = new TextField();
+
+        gridPane.add(new Label("Enter IP-address"), 0, 0);
+        gridPane.add(ipField, 0, 1);
+
+        textInputDialog.getDialogPane().setContent(gridPane);
+
+        Optional<String> result = textInputDialog.showAndWait();
+        result.ifPresent(e -> {
+            try {
+                getThreads(ipField.getText());
+                primaryStage.setScene(new Scene(mainPane, this.width, this.height));
+                primaryStage.setTitle("Pool Game");
+                primaryStage.show();
+                draw(g2d);
+            } catch (IOException ex) {
+                ipField.setText("Wrong IP-address");
+            }
+        });
 
         new AnimationTimer() {
             long last = -1;
@@ -103,8 +121,13 @@ public class PoolClient extends Application {
         }.start();
     }
 
-    private Thread getThreads() throws IOException {
-        Socket socket = new Socket("localhost", 2001);
+    private void playerDisconnectedPopup() {
+        Alert disconnectedAlert = new Alert(Alert.AlertType.ERROR, "player disconnected");
+        disconnectedAlert.show();
+    }
+
+    private void getThreads(String ipAdress) throws IOException {
+        Socket socket = new Socket(ipAdress, 2001);
 
         Thread threadSend = new Thread(() -> {
             while (running) {
@@ -130,7 +153,7 @@ public class PoolClient extends Application {
                 }
             }
         });
-        return threadReceive;
+        threadReceive.start();
     }
 
     private HBox getHBox(Label labelPower) {
@@ -189,6 +212,16 @@ public class PoolClient extends Application {
         //stopt de thread als het tabje gesloten wordt
         running = primaryStage.isShowing();
 
+        if (data == null) {
+            return;
+        }
+
+        if (data.isDisconnected() && running) {
+            playerDisconnectedPopup();
+            primaryStage.close();
+            running = false;
+        }
+
         //los object zodat thread niet tussendoor het data-object aanpast
         ServerData data1 = data;
 
@@ -201,6 +234,10 @@ public class PoolClient extends Application {
     }
 
     private void draw(FXGraphics2D g) {
+        if (data == null) {
+            return;
+        }
+
         g.setTransform(new AffineTransform());
         g.setBackground(Color.white);
 

@@ -19,8 +19,9 @@ public class ServerData implements Serializable {
     private String player1Nickname;
     private String player2Nickname;
     private ClientData otherPlayerData;
+    private boolean disconnected;
 
-    public ServerData(List<Ball> balls, Player clientPlayer, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue, ClientData otherPlayerData) {
+    public ServerData(List<Ball> balls, Player clientPlayer, Player currentlyPlaying, Player player1, Player player2, AffineTransform cue, double cueRotation, boolean showCue, ClientData otherPlayerData, boolean disconnected) {
         for (Ball ball : balls) {
             transforms.add(new TransformCarrier(ball.getBall().getTransform()));
         }
@@ -31,6 +32,7 @@ public class ServerData implements Serializable {
         this.cue = new TransformCarrier(cue, cueRotation);
         this.showCue = showCue;
         this.otherPlayerData = otherPlayerData;
+        this.disconnected = disconnected;
 
         applyNickname(clientPlayer);
     }
@@ -127,5 +129,13 @@ public class ServerData implements Serializable {
 
     public void setOtherPlayerData(ClientData otherPlayerData) {
         this.otherPlayerData = otherPlayerData;
+    }
+
+    public boolean isDisconnected() {
+        return disconnected;
+    }
+
+    public void setDisconnected(boolean disconnected) {
+        this.disconnected = disconnected;
     }
 }

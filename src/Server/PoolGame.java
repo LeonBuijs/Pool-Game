@@ -41,6 +41,7 @@ public class PoolGame extends Application {
     private World world;
     private List<GameObject> gameObjectList = new ArrayList<>();
     private boolean debugSelected = false;
+    private boolean running = true;
     private BufferedImage image;
     private BufferedImage imageCue;
     //    private List<Body> balls = new ArrayList<>();
@@ -65,11 +66,11 @@ public class PoolGame extends Application {
     private int playerCount = 0;
     private Label currentTurnLabel = new Label();
     private ClientData playerData;
+    private boolean disconnected = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Thread serverThread = new Thread(() -> {
-            System.out.println("Server");
             ServerSocket serverSocket = null;
             try {
                 serverSocket = new ServerSocket(2001);
@@ -81,7 +82,8 @@ public class PoolGame extends Application {
             } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
             }
-            while (true) {
+            while (running) {
+                System.out.println("sdsdsds");
                 Socket socket = null;
                 try {
                     socket = serverSocket.accept();
@@ -142,6 +144,8 @@ public class PoolGame extends Application {
                 } catch (IOException e) {
                     System.out.println("client disconnected");
                     running = false;
+                    disconnected = true;
+                    this.running = false;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -168,8 +172,10 @@ public class PoolGame extends Application {
                     send(finalSocket, player);
                 } catch (IOException e) {
                     System.out.println("client disconnected");
-                    clientDisconnected(player);
+                    disconnected = true;
+//                    clientDisconnected(player);
                     running = false;
+                    this.running = false;
                     player = null;
                 }
             }
@@ -213,7 +219,7 @@ public class PoolGame extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerData));
+            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerData, disconnected));
         }
     }
 
@@ -600,8 +606,12 @@ public class PoolGame extends Application {
         createCheckers();
         createBalls();
 
-        player1.setBallType(null);
-        player2.setBallType(null);
+        if (player1 != null) {
+            player1.setBallType(null);
+        }
+        if (player2 != null) {
+            player2.setBallType(null);
+        }
 
         lastPottedHalf = -1;
         lastPottedWhole = -1;
