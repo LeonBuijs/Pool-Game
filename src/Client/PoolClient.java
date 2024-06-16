@@ -25,6 +25,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
@@ -47,6 +48,7 @@ public class PoolClient extends Application {
     private ClientData otherPlayerData;
     private String nickname = "Guest";
     private NameChecker nameChecker = new NameChecker();
+    private boolean gameOver = false;
 
     Slider sliderRotation = new Slider(0, 360, 180);
     Slider sliderPower = new Slider(0, 100, 0);
@@ -121,9 +123,18 @@ public class PoolClient extends Application {
         }.start();
     }
 
-    private void playerDisconnectedPopup() {
-        Alert disconnectedAlert = new Alert(Alert.AlertType.ERROR, "player disconnected");
+    private void opponentDisconnectedPopup() {
+        Alert disconnectedAlert = new Alert(Alert.AlertType.ERROR, "Your opponent has left the game");
+        disconnectedAlert.setTitle("Opponent disconnected");
+        disconnectedAlert.setHeaderText("Opponent disconnected");
         disconnectedAlert.show();
+    }
+
+    private void gameWonPopup(String name) {
+        Alert wonAlert = new Alert(Alert.AlertType.INFORMATION, name + " won the game");
+        wonAlert.setTitle("Game Over");
+        wonAlert.setHeaderText("GGWP");
+        wonAlert.show();
     }
 
     private void getThreads(String ipAdress) throws IOException {
@@ -217,9 +228,14 @@ public class PoolClient extends Application {
         }
 
         if (data.isDisconnected() && running) {
-            playerDisconnectedPopup();
+            opponentDisconnectedPopup();
             primaryStage.close();
             running = false;
+        }
+
+        if (!Objects.equals(data.getWinningPlayer(), "") && !gameOver) {
+            gameWonPopup(data.getWinningPlayer());
+            gameOver = true;
         }
 
         //los object zodat thread niet tussendoor het data-object aanpast

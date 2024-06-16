@@ -62,6 +62,7 @@ public class PoolGame extends Application {
     private Label currentTurnLabel = new Label();
     private ClientData playerData;
     private boolean disconnected = false;
+    private String winningPlayer = "";
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -201,7 +202,8 @@ public class PoolGame extends Application {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerData, disconnected));
+            objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2,
+                    cueTransform, sliderRotation.getValue(), showCue, playerData, disconnected, winningPlayer));
         }
     }
 
@@ -307,7 +309,7 @@ public class PoolGame extends Application {
                             if (!allPotted || currentPlayer.getBallType() == null) {
                                 resetGame();
                             } else if (checkInCorrectPocket()) {
-                                //todo iets doen dat je gewonnen hebt fzo
+                                winningPlayer = currentPlayer.getNickName();
                                 System.out.println("yippeeee");
                             } else {
                                 resetGame();
