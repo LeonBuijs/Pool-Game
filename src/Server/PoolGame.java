@@ -28,8 +28,10 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -72,6 +74,11 @@ public class PoolGame extends Application {
             try {
                 serverSocket = new ServerSocket(2001);
             } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                System.out.println(Inet4Address.getLocalHost().getHostAddress());
+            } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
             }
             while (true) {
