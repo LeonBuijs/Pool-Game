@@ -174,7 +174,7 @@ public class PoolClient extends Application {
         Label nameLabel = new Label("nickname: ");
 
         TextField textField = new TextField("Guest");
-        textField.setMinWidth(200);
+        textField.setMinWidth(150);
 
         UnaryOperator<TextFormatter.Change> rejectChange = change -> {
             if (change.isContentChange()) {
@@ -203,7 +203,7 @@ public class PoolClient extends Application {
             }
         });
 
-        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, playersLabel, new HBox(nameLabel, textField, changeNameButton));
+        HBox hBox = new HBox(power, rotation, fireButton, currentTurnLabel, new HBox(nameLabel, textField, changeNameButton));
         hBox.setSpacing(50);
         return hBox;
     }
