@@ -233,10 +233,9 @@ public class PoolClient extends Application {
             g.drawImage(balls.get(i), tx1, null);
         }
         if (showCue) {
-            //todo afstand fixen
             AffineTransform cueTransform = new AffineTransform();
-            cueTransform.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115 - 1.5 + Math.cos(Math.toRadians(this.cueTransform.getRotation())) * 2.5),
-                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) - 1.5 + Math.sin(Math.toRadians(this.cueTransform.getRotation())) * 2.5);
+            cueTransform.translate(transformList.get(transformList.size() - 1).getX() + (balls.get(balls.size() - 1).getWidth() * 0.0115 - 1.5 + Math.cos(Math.toRadians(this.cueTransform.getRotation())) * 4),
+                    transformList.get(transformList.size() - 1).getY() + (balls.get(balls.size() - 1).getHeight() * 0.0115) - 1.5 + Math.sin(Math.toRadians(this.cueTransform.getRotation())) * 4);
             cueTransform.scale(0.1, 0.1);
             cueTransform.scale(0.15, 0.15);
             cueTransform.rotate(Math.toRadians(this.cueTransform.getRotation()), cueTransform.getTranslateX(), cueTransform.getTranslateY());
