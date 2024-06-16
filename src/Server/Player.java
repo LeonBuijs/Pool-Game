@@ -9,12 +9,6 @@ public class Player implements Serializable {
     private String nickName;
     private BallType ballType;
 
-    public Player(int playerNumber, String nickName, BallType ballType) {
-        this.playerNumber = playerNumber;
-        this.nickName = nickName;
-        this.ballType = ballType;
-    }
-
     public Player(int playerNumber, String nickName) {
         this.playerNumber = playerNumber;
         this.nickName = nickName;
@@ -44,9 +38,9 @@ public class Player implements Serializable {
     @Override
     public String toString() {
         return "Server.Player{" +
-                "playerNumber=" + playerNumber +
-                ", nickName='" + nickName + '\'' +
-                ", ballType=" + ballType +
-                '}';
+               "playerNumber=" + playerNumber +
+               ", nickName='" + nickName + '\'' +
+               ", ballType=" + ballType +
+               '}';
     }
 }

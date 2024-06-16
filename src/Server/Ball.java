@@ -4,7 +4,6 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 import utility.BallType;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Ball {
@@ -35,11 +34,6 @@ public class Ball {
 
     public boolean checkRolling() {
         Vector2 vector2 = ball.getChangeInPosition();
-
-        //test sout
-//        if (ballType.equals(BallType.WHITE)) {
-//            System.out.println(ball.getChangeInPosition());
-//        }
 
         if (vector2.x < 1.0e-3 && vector2.x > -1.0e-3 && vector2.y < 1.0e-3 && vector2.y > -1.0e-3) {
             return false;
@@ -80,6 +74,4 @@ public class Ball {
     public void setPotted(boolean potted) {
         this.potted = potted;
     }
-
-//    public enum BallType implements Serializable {HALF, WHOLE, BLACK, WHITE}
 }

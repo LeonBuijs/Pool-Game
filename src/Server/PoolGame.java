@@ -5,12 +5,9 @@ import utility.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
@@ -44,7 +41,6 @@ public class PoolGame extends Application {
     private boolean running = true;
     private BufferedImage image;
     private BufferedImage imageCue;
-    //    private List<Body> balls = new ArrayList<>();
     private List<Ball> ballObjectList = new ArrayList<>();
     private List<Ball> ballsWhole = new ArrayList<>();
     private List<Ball> ballsHalf = new ArrayList<>();
@@ -63,7 +59,6 @@ public class PoolGame extends Application {
     private Player player2 = null;
     private Player currentPlayer = player1;
     private Turn turn = new Turn();
-    private int playerCount = 0;
     private Label currentTurnLabel = new Label();
     private ClientData playerData;
     private boolean disconnected = false;
@@ -111,8 +106,6 @@ public class PoolGame extends Application {
         mousePicker = new MousePicker(canvas);
 
         sliderPower.setShowTickLabels(true);
-//        HBox hbox = getHBox(); //Test
-//        mainPane.setTop(hbox);
 
         new AnimationTimer() {
             long last = -1;
@@ -173,7 +166,6 @@ public class PoolGame extends Application {
                 } catch (IOException e) {
                     System.out.println("client disconnected");
                     disconnected = true;
-//                    clientDisconnected(player);
                     running = false;
                     this.running = false;
                     player = null;
@@ -182,16 +174,6 @@ public class PoolGame extends Application {
         });
         return threadSend;
     }
-
-    private void clientDisconnected(Player player) {
-        resetGame();
-        if (player.getPlayerNumber() == 1) {
-            player1 = player2;
-        } else if (player.getPlayerNumber() == 2) {
-            player2 = null;
-        }
-    }
-
     private void receive(Socket socket) throws IOException, ClassNotFoundException {
         InputStream inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
@@ -221,32 +203,6 @@ public class PoolGame extends Application {
 
             objectOutputStream.writeObject(new ServerData(ballObjectList, player, currentPlayer, player1, player2, cueTransform, sliderRotation.getValue(), showCue, playerData, disconnected));
         }
-    }
-
-    private HBox getHBox() {
-        Label labelPower = new Label("Power: ");
-        HBox power = new HBox(labelPower, sliderPower);
-        power.setSpacing(10);
-
-        Label labelRotation = new Label("Rotation: ");
-        HBox rotation = new HBox(labelRotation, sliderRotation);
-        rotation.setSpacing(10);
-
-        Button fireButton = new Button("Fire");
-        fireButton.setOnAction(event -> {
-            if (showCue && player1 != null && player2 != null) {
-                shootBall();
-                turn = new Turn();
-                turn.setTurnActive(true);
-            }
-        });
-
-        CheckBox showDebug = new CheckBox("Show debug");
-        showDebug.setOnAction(e -> debugSelected = showDebug.isSelected());
-
-        HBox hbox = new HBox(showDebug, power, rotation, fireButton, currentTurnLabel, new Label(""), new Label("VS"), new Label(""));
-        hbox.setSpacing(100);
-        return hbox;
     }
 
     public void init() {

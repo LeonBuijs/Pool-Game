@@ -24,10 +24,6 @@ public class Turn {
         this.noBallPotted = noBallPotted;
     }
 
-    public boolean isWhiteBallPotted() {
-        return whiteBallPotted;
-    }
-
     public void setWhiteBallPotted(boolean whiteBallPotted) {
         this.whiteBallPotted = whiteBallPotted;
     }

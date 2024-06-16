@@ -34,15 +34,7 @@ public class TransformCarrier implements Serializable {
         return y;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
     public double getRotation() {
         return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
     }
 }
