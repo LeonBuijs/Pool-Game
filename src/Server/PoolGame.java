@@ -79,7 +79,6 @@ public class PoolGame extends Application {
                 throw new RuntimeException(e);
             }
             while (running) {
-                System.out.println("sdsdsds");
                 Socket socket = null;
                 try {
                     socket = serverSocket.accept();

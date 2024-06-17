@@ -354,7 +354,6 @@ public class PoolClient extends Application {
         g.setColor(Color.black);
         g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 25));
         g.drawString(this.playerNames, this.width / 2 - ((int) (this.playerNames.length() * 7.5)), 50);
-        g.drawLine(this.width / 2, 0, this.width / 2, this.height);
 
         AffineTransform transform = new AffineTransform();
         AffineTransform transform2 = new AffineTransform();
